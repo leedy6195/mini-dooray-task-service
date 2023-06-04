@@ -1,18 +1,16 @@
 package com.nhn.minidooray.taskapi.controller;
 
 import com.nhn.minidooray.taskapi.domain.request.ProjectCreateRequest;
-import com.nhn.minidooray.taskapi.domain.response.ProjectCreateResponse;
+import com.nhn.minidooray.taskapi.domain.request.ProjectUpdateRequest;
+import com.nhn.minidooray.taskapi.domain.response.CommonResponse;
+import com.nhn.minidooray.taskapi.domain.response.ProjectByAccountResponse;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
+import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.ProjectService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,22 +23,76 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping("${com.nhn.minidooray.taskapi.requestmapping.create-project}")
-    public ResultResponse<ProjectCreateResponse> createProject(@RequestBody @Valid ProjectCreateRequest projectCreateRequest,
-                                              BindingResult bindingResult) {
+    public ResultResponse<CommonResponse> createProject(@RequestBody @Valid ProjectCreateRequest projectCreateRequest,
+                                                        BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
         Long projectId = projectService.createProject(projectCreateRequest);
-        return ResultResponse.<ProjectCreateResponse>builder()
+        return ResultResponse.<CommonResponse>builder()
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.CREATED.value())
-                        .resultMessage("success")
+                        .resultMessage("created successfully")
                         .build())
-                .result(List.of(ProjectCreateResponse.builder()
-                        .projectId(projectId)
+                .result(List.of(CommonResponse.builder().id(projectId).build()))
+                .build();
+    }
+
+    @PutMapping("${com.nhn.minidooray.taskapi.requestmapping.update-project}")
+    public ResultResponse<CommonResponse> updateProject(
+            @PathVariable("projectId") Long projectId,
+            @RequestBody @Valid ProjectUpdateRequest projectUpdateRequest,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
+        projectService.updateProject(projectId, projectUpdateRequest);
+        return ResultResponse.<CommonResponse>builder()
+                .header(ResultResponse.Header.builder()
+                        .isSuccessful(true)
+                        .resultCode(HttpStatus.OK.value())
+                        .resultMessage("updated successfully")
+                        .build())
+                .result(List.of(CommonResponse.builder()
+                        .id(projectId)
                         .build()))
                 .build();
-
-        //return ResultResponse.<Void>builder()
-        //        .build();
     }
+
+    @DeleteMapping("${com.nhn.minidooray.taskapi.requestmapping.delete-project}")
+    public ResultResponse<CommonResponse> deleteProject(@PathVariable("projectId") Long projectId) {
+        projectService.deleteProject(projectId);
+        return ResultResponse.<CommonResponse>builder()
+                .header(ResultResponse.Header.builder()
+                        .isSuccessful(true)
+                        .resultCode(HttpStatus.OK.value())
+                        .resultMessage("deleted successfully")
+                        .build())
+                .result(List.of(CommonResponse.builder()
+                        .id(projectId)
+                        .build()))
+                .build();
+    }
+
+    @GetMapping("/{accountId}/projects")
+    public ResultResponse<ProjectByAccountResponse> getProjects(@PathVariable("accountId") String accountId) {
+        List<ProjectByAccountResponse> projects = projectService.getProjectsByAccount(accountId);
+        return ResultResponse.<ProjectByAccountResponse>builder()
+                .header(ResultResponse.Header.builder()
+                        .isSuccessful(true)
+                        .resultCode(HttpStatus.OK.value())
+                        .resultMessage("get successfully")
+                        .build())
+                .result(projects)
+                .build();
+    }
+
+
+
 
 }

@@ -1,10 +1,8 @@
 package com.nhn.minidooray.taskapi.entity;
 
 
-import com.nhn.minidooray.taskapi.enums.AuthorityType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.nhn.minidooray.taskapi.enumerate.AuthorityType;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,8 +10,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "authority")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class AuthorityEntity {
     @Id
     private String code;
@@ -22,6 +22,10 @@ public class AuthorityEntity {
     @Enumerated(EnumType.STRING)
     private AuthorityType authorityType;
 
-    @Column(name = "create_at")
     private LocalDateTime createAt;
+
+    @PrePersist
+    public void setCreateAt() {
+        this.createAt = LocalDateTime.now();
+    }
 }

@@ -6,10 +6,8 @@ import lombok.Data;
 @Data
 public class ProjectCreateResponse {
     private Long projectId;
-
     @Builder
     public ProjectCreateResponse(Long projectId) {
         this.projectId = projectId;
     }
-
 }

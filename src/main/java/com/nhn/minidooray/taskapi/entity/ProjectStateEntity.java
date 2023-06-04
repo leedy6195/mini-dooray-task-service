@@ -1,7 +1,7 @@
 package com.nhn.minidooray.taskapi.entity;
 
 
-import com.nhn.minidooray.taskapi.enums.ProjectStateType;
+import com.nhn.minidooray.taskapi.enumerate.ProjectStateType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,8 +10,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "project_state")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ProjectStateEntity {
     @Id
     private String code;
@@ -20,13 +22,10 @@ public class ProjectStateEntity {
     @Enumerated(EnumType.STRING)
     private ProjectStateType projectStateType;
 
-    @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    @Builder
-    public ProjectStateEntity(String code, ProjectStateType projectStateType, LocalDateTime createAt) {
-        this.code = code;
-        this.projectStateType = projectStateType;
-        this.createAt = createAt;
+    @PrePersist
+    public void setCreateAt() {
+        this.createAt = LocalDateTime.now();
     }
 }
