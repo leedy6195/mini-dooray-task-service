@@ -17,7 +17,7 @@ public class ProjectAccountEntity {
     private Pk pk;
 
     @MapsId("projectId")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "project_id")
     private ProjectEntity projectEntity;
 

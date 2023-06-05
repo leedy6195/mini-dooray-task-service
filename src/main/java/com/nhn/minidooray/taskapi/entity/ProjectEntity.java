@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "project")
@@ -24,6 +25,10 @@ public class ProjectEntity {
     private ProjectStateEntity projectStateEntity;
 
     private LocalDateTime createAt;
+
+    // for cascading remove
+    @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.REMOVE)
+    private List<ProjectAccountEntity> projectAccountEntities;
 
     @PrePersist
     public void setCreateAt() {

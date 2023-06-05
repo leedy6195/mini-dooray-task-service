@@ -93,11 +93,6 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity projectEntity = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 
-        projectAccountRepository.deleteById(
-                ProjectAccountEntity.Pk.builder()
-                        .projectId(projectId)
-                        .build());
-
         projectRepository.delete(projectEntity);
     }
 
