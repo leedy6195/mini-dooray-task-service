@@ -1,7 +1,10 @@
 package com.nhn.minidooray.taskapi.service;
 
+import com.nhn.minidooray.taskapi.domain.request.ProjectAccountCreateRequest;
+import com.nhn.minidooray.taskapi.domain.request.ProjectAccountUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectUpdateRequest;
+import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
 import com.nhn.minidooray.taskapi.domain.response.ProjectByAccountResponse;
 
 import java.util.List;
@@ -12,6 +15,7 @@ public interface ProjectService {
     Long updateProject(Long projectId, ProjectUpdateRequest projectUpdateRequest);
 
     void deleteProject(Long projectId);
+
 
     List<ProjectByAccountResponse> getProjectsByAccount(String accountId);
 }

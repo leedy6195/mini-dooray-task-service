@@ -22,6 +22,7 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
+
     @PostMapping("${com.nhn.minidooray.taskapi.requestmapping.create-project}")
     public ResultResponse<CommonResponse> createProject(@RequestBody @Valid ProjectCreateRequest projectCreateRequest,
                                                         BindingResult bindingResult) {
@@ -35,7 +36,7 @@ public class ProjectController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.CREATED.value())
-                        .resultMessage("created successfully")
+                        .resultMessage("${com.nhn.minidooray.taskapi.create-succ-message}")
                         .build())
                 .result(List.of(CommonResponse.builder().id(projectId).build()))
                 .build();
@@ -56,7 +57,7 @@ public class ProjectController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
-                        .resultMessage("updated successfully")
+                        .resultMessage("${com.nhn.minidooray.taskapi.update-succ-message}")
                         .build())
                 .result(List.of(CommonResponse.builder()
                         .id(projectId)
@@ -70,8 +71,8 @@ public class ProjectController {
         return ResultResponse.<CommonResponse>builder()
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
-                        .resultCode(HttpStatus.OK.value())
-                        .resultMessage("deleted successfully")
+                        .resultCode(HttpStatus.NO_CONTENT.value())
+                        .resultMessage("${com.nhn.minidooray.taskapi.delete-succ-message}")
                         .build())
                 .result(List.of(CommonResponse.builder()
                         .id(projectId)
@@ -86,13 +87,11 @@ public class ProjectController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
-                        .resultMessage("get successfully")
+                        .resultMessage("${com.nhn.minidooray.taskapi.get-succ-message}")
                         .build())
                 .result(projects)
                 .build();
     }
-
-
 
 
 }

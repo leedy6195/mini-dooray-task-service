@@ -4,8 +4,8 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "accountId": "tester1",
-  "projectName": "test project1"
+  "accountId": "tester10",
+  "projectName": "test project10"
 }
 
 ### 프로젝트 수정
@@ -23,5 +23,31 @@ Content-Type: application/json
 DELETE /project-api/projects/2 HTTP/1.1
 Host: localhost:8080
 
+### 프로젝트에 계정 추가
+POST /project-api/projects/4/accounts HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "accountId": "tester3",
+  "authorityCode": "02"
+}
+
+### 프로젝트의 계정 수정
+PUT /project-api/projects/4/accounts/tester2 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "authorityCode": "02"
+}
+
+### 프로젝트의 계정 삭제
+DELETE /project-api/projects/4/accounts/tester2 HTTP/1.1
+Host: localhost:8080
+
+### 프로젝트의 계정 조회 (권한 포함)
+GET /project-api/projects/4/accounts HTTP/1.1
+Host: localhost:8080
 
 

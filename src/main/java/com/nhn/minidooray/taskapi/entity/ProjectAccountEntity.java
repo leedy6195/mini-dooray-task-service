@@ -21,12 +21,9 @@ public class ProjectAccountEntity {
     @JoinColumn(name = "project_id")
     private ProjectEntity projectEntity;
 
-    @MapsId("authorityCode")
     @ManyToOne
     @JoinColumn(name = "authority_code")
     private AuthorityEntity authorityEntity;
-
-    private String accountId;
 
     private LocalDateTime createAt;
 
@@ -39,7 +36,7 @@ public class ProjectAccountEntity {
     @Builder
     public static class Pk implements Serializable {
         private Long projectId;
-        private String authorityCode;
+        private String accountId;
     }
 
     @PrePersist
