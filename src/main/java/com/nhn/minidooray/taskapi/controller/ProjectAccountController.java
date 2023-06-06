@@ -1,5 +1,7 @@
 package com.nhn.minidooray.taskapi.controller;
 
+import com.nhn.minidooray.taskapi.config.ApiMessageProperties;
+import com.nhn.minidooray.taskapi.config.RequestMappingProperties;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
@@ -19,7 +21,7 @@ import java.util.List;
 @RequestMapping("${com.nhn.minidooray.taskapi.requestmapping.prefix}")
 public class ProjectAccountController {
     private final ProjectAccountService projectAccountService;
-
+    private final ApiMessageProperties apiMessageProperties;
 
     @PostMapping("${com.nhn.minidooray.taskapi.requestmapping.create-account}")
     public ResultResponse<Void> createAccount(@PathVariable("projectId") Long projectId,
@@ -35,7 +37,7 @@ public class ProjectAccountController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.CREATED.value())
-                        .resultMessage("${com.nhn.minidooray.taskapi.create-succ-message}")
+                        .resultMessage(apiMessageProperties.getCreateSuccMessage())
                         .build())
                 .result(List.of())
                 .build();
@@ -56,7 +58,7 @@ public class ProjectAccountController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
-                        .resultMessage("${com.nhn.minidooray.taskapi.update-succ-message}")
+                        .resultMessage(apiMessageProperties.getUpdateSuccMessage())
                         .build())
                 .result(List.of())
                 .build();
@@ -71,7 +73,7 @@ public class ProjectAccountController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.NO_CONTENT.value())
-                        .resultMessage("${com.nhn.minidooray.taskapi.delete-succ-message}")
+                        .resultMessage(apiMessageProperties.getDeleteSuccMessage())
                         .build())
                 .result(List.of())
                 .build();
@@ -84,7 +86,7 @@ public class ProjectAccountController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
-                        .resultMessage("${com.nhn.minidooray.taskapi.get-succ-message}")
+                        .resultMessage(apiMessageProperties.getGetSuccMessage())
                         .build())
                 .result(accounts)
                 .build();
