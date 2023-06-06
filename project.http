@@ -50,4 +50,29 @@ Host: localhost:8080
 GET /project-api/projects/4/accounts HTTP/1.1
 Host: localhost:8080
 
+### 프로젝트에 마일스톤 추가
+POST /project-api/projects/4/milestones HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "name": "test milestone1",
+  "startDate": "2021-01-01",
+  "endDate": "2021-01-31"
+}
+
+### 마일스톤 수정
+PUT /project-api/projects/4/milestones/1 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "name": "test milestone2",
+  "startDate": "2021-01-02",
+  "endDate": "2021-02-02"
+}
+
+### 마일스톤 삭제
+DELETE /project-api/projects/4/milestones/1 HTTP/1.1
+Host: localhost:8080
 
