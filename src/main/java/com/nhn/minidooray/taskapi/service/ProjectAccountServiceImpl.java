@@ -3,6 +3,7 @@ package com.nhn.minidooray.taskapi.service;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
+import com.nhn.minidooray.taskapi.domain.response.ProjectAccountRequest;
 import com.nhn.minidooray.taskapi.entity.AuthorityEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectAccountEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectEntity;
@@ -90,5 +91,14 @@ public class ProjectAccountServiceImpl implements ProjectAccountService {
     @Override
     public Page<AccountByProjectResponse> getAccountsByProject(Long projectId, Pageable pageable) {
         return projectAccountRepository.findAccountsByProjectId(projectId, pageable);
+    }
+
+    @Override
+    public ProjectAccountRequest getAccountByProject(Long projectId, String accountId) {
+        return projectAccountRepository.findByPk(ProjectAccountEntity.Pk.builder()
+                        .projectId(projectId)
+                        .accountId(accountId)
+                        .build())
+                .orElseThrow();
     }
 }

@@ -3,6 +3,7 @@ package com.nhn.minidooray.taskapi.controller;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
+import com.nhn.minidooray.taskapi.domain.response.ProjectAccountRequest;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.ProjectAccountService;
@@ -94,6 +95,20 @@ public class ProjectAccountController implements MessageSourceAware {
                         .resultMessage(messageSourceAccessor.getMessage("api.response.get.success"))
                         .build())
                 .result(List.of(accounts))
+                .build();
+    }
+
+    @GetMapping("${com.nhn.minidooray.taskapi.requestmapping.get-account}")
+    public ResultResponse<ProjectAccountRequest> getAccount(@PathVariable("projectId") Long projectId,
+                                                               @PathVariable("accountId") String accountId) {
+        ProjectAccountRequest account = projectAccountService.getAccountByProject(projectId, accountId);
+        return ResultResponse.<ProjectAccountRequest>builder()
+                .header(ResultResponse.Header.builder()
+                        .isSuccessful(true)
+                        .resultCode(HttpStatus.OK.value())
+                        .resultMessage(messageSourceAccessor.getMessage("api.response.get.success"))
+                        .build())
+                .result(List.of(account))
                 .build();
     }
 
