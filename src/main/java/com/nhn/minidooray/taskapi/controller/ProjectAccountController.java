@@ -1,7 +1,5 @@
 package com.nhn.minidooray.taskapi.controller;
 
-import com.nhn.minidooray.taskapi.config.ApiMessageProperties;
-import com.nhn.minidooray.taskapi.config.RequestMappingProperties;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
