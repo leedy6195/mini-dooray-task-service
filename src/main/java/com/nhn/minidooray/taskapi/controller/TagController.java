@@ -8,6 +8,9 @@ import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +21,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${com.nhn.minidooray.taskapi.requestmapping.prefix}")
-public class TagController {
+public class TagController implements MessageSourceAware {
     private final TagService tagService;
-    private final ApiMessageProperties apiMessageProperties;
+
+    private MessageSourceAccessor messageSourceAccessor;
 
     @PostMapping("${com.nhn.minidooray.taskapi.requestmapping.create-tag}")
     public ResultResponse<CommonResponse> createTag(
@@ -36,7 +40,7 @@ public class TagController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.CREATED.value())
-                        .resultMessage(apiMessageProperties.getCreateSuccMessage())
+                        .resultMessage(messageSourceAccessor.getMessage("api.response.create.success"))
                         .build())
                 .result(List.of(CommonResponse.builder().id(tagId).build()))
                 .build();
@@ -56,7 +60,7 @@ public class TagController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
-                        .resultMessage(apiMessageProperties.getUpdateSuccMessage())
+                        .resultMessage(messageSourceAccessor.getMessage("api.response.update.success"))
                         .build())
                 .build();
     }
@@ -69,9 +73,14 @@ public class TagController {
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
-                        .resultMessage(apiMessageProperties.getDeleteSuccMessage())
+                        .resultMessage(messageSourceAccessor.getMessage("api.response.delete.success"))
                         .build())
                 .build();
+    }
+
+    @Override
+    public void setMessageSource(MessageSource messageSource) {
+        messageSourceAccessor = new MessageSourceAccessor(messageSource);
     }
 
 }

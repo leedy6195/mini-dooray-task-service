@@ -1,5 +1,6 @@
 package com.nhn.minidooray.taskapi.domain.request;
 
+import com.nhn.minidooray.taskapi.entity.MilestoneEntity;
 import lombok.Data;
 
 import java.time.LocalDate;

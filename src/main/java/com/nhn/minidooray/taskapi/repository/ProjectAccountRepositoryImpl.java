@@ -9,8 +9,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.util.List;
 
-public class ProjectAccountCustomRepositoryImpl extends QuerydslRepositorySupport implements ProjectAccountCustomRepository {
-    public ProjectAccountCustomRepositoryImpl() {
+
+public class ProjectAccountRepositoryImpl extends QuerydslRepositorySupport implements ProjectAccountCustomRepository {
+    public ProjectAccountRepositoryImpl() {
         super(ProjectAccountEntity.class);
     }
     @Override

@@ -67,7 +67,7 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "name": "test milestone2",
+  "name": "test milestone1",
   "startDate": "2021-01-02",
   "endDate": "2021-02-02"
 }
