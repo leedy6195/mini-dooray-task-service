@@ -1,6 +1,6 @@
 package com.nhn.minidooray.taskapi.domain.response;
 
-public interface ProjectAccountRequest {
+public interface ProjectAccountResponse {
     Long getProjectId();
 
     String getAccountId();

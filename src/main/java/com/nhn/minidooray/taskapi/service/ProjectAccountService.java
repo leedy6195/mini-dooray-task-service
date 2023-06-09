@@ -3,7 +3,7 @@ package com.nhn.minidooray.taskapi.service;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
-import com.nhn.minidooray.taskapi.domain.response.ProjectAccountRequest;
+import com.nhn.minidooray.taskapi.domain.response.ProjectAccountResponse;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface ProjectAccountService {
 
     List<AccountByProjectResponse> getAccountsByProject(Long projectId);
 
-    ProjectAccountRequest getAccountByProject(Long projectId, String accountId);
+    ProjectAccountResponse getAccountByProject(Long projectId, String accountId);
 }
