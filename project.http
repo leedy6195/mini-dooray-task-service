@@ -24,12 +24,12 @@ DELETE /project-api/projects/2 HTTP/1.1
 Host: localhost:8080
 
 ### 프로젝트에 계정 추가
-POST /project-api/projects/4/accounts HTTP/1.1
-Host: localhost:8080
+POST /project-api/projects/5/accounts HTTP/1.1
+Host: 127.0.0.1:8081
 Content-Type: application/json
 
 {
-  "accountId": "tester3",
+  "accountId": "tester1",
   "authorityCode": "02"
 }
 
@@ -46,7 +46,11 @@ Content-Type: application/json
 DELETE /project-api/projects/4/accounts/tester2 HTTP/1.1
 Host: localhost:8080
 
-### 프로젝트의 계정 조회 (권한 포함)
+### 계정의 모든 프로젝트 조회
+GET /project-api/accounts/tester1/projects HTTP/1.1
+Host: localhost:8081
+
+### 프로젝트의 모든 계정 조회 (권한 포함)
 GET /project-api/projects/4/accounts HTTP/1.1
 Host: localhost:8080
 

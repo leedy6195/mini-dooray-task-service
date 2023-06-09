@@ -1,17 +1,51 @@
 package com.nhn.minidooray.taskapi.service;
 
 import com.nhn.minidooray.taskapi.domain.request.TaskTagCreateRequest;
+import com.nhn.minidooray.taskapi.entity.TagEntity;
+import com.nhn.minidooray.taskapi.entity.TaskEntity;
 import com.nhn.minidooray.taskapi.entity.TaskTagEntity;
+import com.nhn.minidooray.taskapi.exception.AlreadyExistsException;
+import com.nhn.minidooray.taskapi.exception.NotFoundException;
+import com.nhn.minidooray.taskapi.repository.TagRepository;
+import com.nhn.minidooray.taskapi.repository.TaskRepository;
+import com.nhn.minidooray.taskapi.repository.TaskTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class TaskTagServiceImpl implements TaskTagService {
-    void createTaskTag(TaskTagCreateRequest taskTagCreateRequest) {
+    private final TaskTagRepository taskTagRepository;
+    private final TaskRepository taskRepository;
+    private final TagRepository tagRepository;
 
+    @Override
+    public void createTaskTag(TaskTagCreateRequest taskTagCreateRequest) {
+        taskTagRepository.findById(TaskTagEntity.Pk.builder().tagId(taskTagCreateRequest.getTagId()).taskId(taskTagCreateRequest.getTaskId()).build()).ifPresent(taskTagEntity -> {
+            throw new AlreadyExistsException("taskTag");
+        });
+        TaskEntity taskEntity = taskRepository.findById(taskTagCreateRequest.getTaskId())
+                .orElseThrow(() -> new NotFoundException("task"));
+        TagEntity tagEntity = tagRepository.findById(taskTagCreateRequest.getTagId())
+                .orElseThrow(() -> new NotFoundException("tag"));
+
+        taskTagRepository.save(
+            TaskTagEntity.builder()
+                    .pk(TaskTagEntity.Pk.builder()
+                            .tagId(taskTagCreateRequest.getTagId())
+                            .taskId(taskTagCreateRequest.getTaskId())
+                            .build())
+                    .taskEntity(taskEntity)
+                    .tagEntity(tagEntity)
+                    .build());
     }
-    void deleteTaskTag(TaskTagEntity.Pk taskTagPk) {
 
+    @Override
+    public void deleteTaskTag(Long taskId, Long tagId) {
+        taskTagRepository.findById(TaskTagEntity.Pk.builder()
+                .tagId(tagId)
+                .taskId(taskId)
+                .build()).orElseThrow(() -> new NotFoundException("taskTag"));
+        taskTagRepository.deleteById(TaskTagEntity.Pk.builder().tagId(tagId).taskId(taskId).build());
     }
 }

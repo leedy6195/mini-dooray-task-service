@@ -4,7 +4,11 @@ import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
 import com.nhn.minidooray.taskapi.entity.ProjectAccountEntity;
 import com.nhn.minidooray.taskapi.entity.QAuthorityEntity;
 import com.nhn.minidooray.taskapi.entity.QProjectAccountEntity;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
@@ -15,11 +19,11 @@ public class ProjectAccountRepositoryImpl extends QuerydslRepositorySupport impl
         super(ProjectAccountEntity.class);
     }
     @Override
-    public List<AccountByProjectResponse> findAccountsByProjectId(Long projectId) {
+    public Page<AccountByProjectResponse> findAccountsByProjectId(Long projectId, Pageable pageable) {
         QProjectAccountEntity projectAccountEntity = QProjectAccountEntity.projectAccountEntity;
         QAuthorityEntity authorityEntity = QAuthorityEntity.authorityEntity;
 
-        return from(projectAccountEntity)
+        QueryResults<AccountByProjectResponse> results = from(projectAccountEntity)
                 .leftJoin(projectAccountEntity.authorityEntity, authorityEntity)
                 .where(projectAccountEntity.pk.projectId.eq(projectId))
                 .select(Projections.fields(
@@ -29,6 +33,11 @@ public class ProjectAccountRepositoryImpl extends QuerydslRepositorySupport impl
                         projectAccountEntity.pk.accountId.as("accountId"),
                         projectAccountEntity.authorityEntity.code.as("authorityCode"),
                         projectAccountEntity.authorityEntity.authorityType.as("authority")
-                )).fetch();
+                ))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
 }
