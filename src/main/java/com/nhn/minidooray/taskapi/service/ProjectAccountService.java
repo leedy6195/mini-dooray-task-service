@@ -4,8 +4,8 @@ import com.nhn.minidooray.taskapi.domain.request.ProjectAccountCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectAccountUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.AccountByProjectResponse;
 import com.nhn.minidooray.taskapi.domain.response.ProjectAccountResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProjectAccountService {
     void createProjectAccount(Long projectId, ProjectAccountCreateRequest projectAccountCreateRequest);
@@ -14,7 +14,7 @@ public interface ProjectAccountService {
 
     void deleteProjectAccount(Long projectId, String accountId);
 
-    List<AccountByProjectResponse> getAccountsByProject(Long projectId);
-
     ProjectAccountResponse getAccountByProject(Long projectId, String accountId);
+
+    Page<AccountByProjectResponse> getAccountsByProject(Long projectId, Pageable pageable);
 }

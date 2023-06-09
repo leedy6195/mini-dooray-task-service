@@ -1,6 +1,7 @@
 package com.nhn.minidooray.taskapi.repository;
 
 import com.nhn.minidooray.taskapi.domain.response.ProjectByAccountResponse;
+import com.nhn.minidooray.taskapi.entity.ProjectAccountEntity;
 import com.nhn.minidooray.taskapi.entity.QProjectAccountEntity;
 import com.nhn.minidooray.taskapi.entity.QProjectEntity;
 import com.nhn.minidooray.taskapi.entity.QProjectStateEntity;
@@ -12,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class ProjectRepositoryImpl extends QuerydslRepositorySupport implements ProjectCustomRepository {
-    public ProjectRepositoryImpl(Class<?> domainClass) {
-        super(domainClass);
+    public ProjectRepositoryImpl() {
+        super(ProjectAccountEntity.class);
     }
 
     @Override
