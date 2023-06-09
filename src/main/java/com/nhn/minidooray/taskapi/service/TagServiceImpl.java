@@ -18,8 +18,8 @@ public class TagServiceImpl implements TagService {
     private final ProjectRepository projectRepository;
     private final TagRepository tagRepository;
 
-
     @Override
+    @Transactional
     public Long createTag(Long projectId, TagCreateRequest tagCreateRequest) {
         ProjectEntity projectEntity = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("project"));
@@ -32,6 +32,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public Long updateTag(Long tagId, TagUpdateRequest tagUpdateRequest) {
         TagEntity tagEntity = tagRepository.findById(tagId)
                 .orElseThrow(() -> new NotFoundException("tag"));
@@ -41,6 +42,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public void deleteTag(Long tagId) {
         TagEntity tagEntity = tagRepository.findById(tagId)
                 .orElseThrow(() -> new NotFoundException("tag"));

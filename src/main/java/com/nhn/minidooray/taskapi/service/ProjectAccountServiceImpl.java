@@ -12,6 +12,8 @@ import com.nhn.minidooray.taskapi.repository.AuthorityRepository;
 import com.nhn.minidooray.taskapi.repository.ProjectAccountRepository;
 import com.nhn.minidooray.taskapi.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +74,7 @@ public class ProjectAccountServiceImpl implements ProjectAccountService {
     }
 
     @Override
+    @Transactional
     public void deleteProjectAccount(Long projectId, String accountId) {
         ProjectAccountEntity projectAccountEntity = projectAccountRepository.findById(
                         ProjectAccountEntity.Pk.builder()
@@ -85,7 +88,7 @@ public class ProjectAccountServiceImpl implements ProjectAccountService {
 
 
     @Override
-    public List<AccountByProjectResponse> getAccountsByProject(Long projectId) {
-        return projectAccountRepository.findAccountsByProjectId(projectId);
+    public Page<AccountByProjectResponse> getAccountsByProject(Long projectId, Pageable pageable) {
+        return projectAccountRepository.findAccountsByProjectId(projectId, pageable);
     }
 }

@@ -1,6 +1,5 @@
 package com.nhn.minidooray.taskapi.controller;
 
-import com.nhn.minidooray.taskapi.config.ApiMessageProperties;
 import com.nhn.minidooray.taskapi.domain.request.MilestoneCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.MilestoneUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.CommonResponse;

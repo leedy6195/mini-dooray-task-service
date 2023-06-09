@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -83,15 +85,15 @@ public class ProjectAccountController implements MessageSourceAware {
     }
 
     @GetMapping("${com.nhn.minidooray.taskapi.requestmapping.get-accounts}")
-    public ResultResponse<AccountByProjectResponse> getAccounts(@PathVariable("projectId") Long projectId) {
-        List<AccountByProjectResponse> accounts = projectAccountService.getAccountsByProject(projectId);
-        return ResultResponse.<AccountByProjectResponse>builder()
+    public ResultResponse<Page<AccountByProjectResponse>> getAccounts(@PathVariable("projectId") Long projectId, Pageable pageable) {
+        Page<AccountByProjectResponse> accounts = projectAccountService.getAccountsByProject(projectId, pageable);
+        return ResultResponse.<Page<AccountByProjectResponse>>builder()
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
                         .resultMessage(messageSourceAccessor.getMessage("api.response.get.success"))
                         .build())
-                .result(accounts)
+                .result(List.of(accounts))
                 .build();
     }
 
