@@ -16,6 +16,8 @@ import com.nhn.minidooray.taskapi.repository.ProjectRepository;
 import com.nhn.minidooray.taskapi.repository.ProjectStateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,10 +86,8 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.delete(projectEntity);
     }
 
-
-
     @Override
-    public List<ProjectByAccountResponse> getProjectsByAccount(String accountId) {
-        return null;
+    public Page<ProjectByAccountResponse> getProjectsByAccount(String accountId, Pageable pageable) {
+        return projectRepository.findProjectsByAccountId(accountId, pageable);
     }
 }

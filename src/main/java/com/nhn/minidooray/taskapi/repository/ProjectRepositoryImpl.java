@@ -30,9 +30,9 @@ public class ProjectRepositoryImpl extends QuerydslRepositorySupport implements 
                 .select(Projections.fields(
                         ProjectByAccountResponse.class,
                         projectAccountEntity.pk.accountId.as("accountId"),
-                        projectAccountEntity.projectEntity.id.as("projectId"),
+                        projectAccountEntity.pk.projectId.as("projectId"),
                         projectAccountEntity.projectEntity.name.as("projectName"),
-                        projectStateEntity.projectStateType.as("projectDescription")
+                        projectStateEntity.projectStateType.as("projectState")
                 ))
                 .orderBy(projectEntity.id.desc())
                 .offset(pageable.getOffset())

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -84,16 +86,16 @@ public class ProjectController implements MessageSourceAware {
                 .build();
     }
 
-    @GetMapping("/{accountId}/projects")
-    public ResultResponse<ProjectByAccountResponse> getProjects(@PathVariable("accountId") String accountId) {
-        List<ProjectByAccountResponse> projects = projectService.getProjectsByAccount(accountId);
-        return ResultResponse.<ProjectByAccountResponse>builder()
+    @GetMapping("/accounts/{accountId}/projects")
+    public ResultResponse<Page<ProjectByAccountResponse>> getProjects(@PathVariable("accountId") String accountId, Pageable pageable) {
+        Page<ProjectByAccountResponse> projects = projectService.getProjectsByAccount(accountId, pageable);
+        return ResultResponse.<Page<ProjectByAccountResponse>>builder()
                 .header(ResultResponse.Header.builder()
                         .isSuccessful(true)
                         .resultCode(HttpStatus.OK.value())
                         .resultMessage(messageSourceAccessor.getMessage("api.response.get.success"))
                         .build())
-                .result(projects)
+                .result(List.of(projects))
                 .build();
     }
 

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ProjectByAccountResponse {
     private String accountId;
-    private Long ProjectId;
+    private Long projectId;
     private String projectName;
     private ProjectStateType projectState;
 }
