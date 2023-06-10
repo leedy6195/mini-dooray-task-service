@@ -10,4 +10,5 @@ public class ProjectByAccountResponse {
     private Long projectId;
     private String projectName;
     private String projectStateCode;
+    private String accountAuthority;
 }

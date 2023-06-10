@@ -93,7 +93,8 @@ public class ProjectServiceImpl implements ProjectService {
                 .accountId(accountId)
                 .projectId(entity.getProjectEntity().getId())
                 .projectName(entity.getProjectEntity().getName())
-                .projectStateCode(entity.getAuthorityEntity().getCode())
+                .projectStateCode(entity.getProjectEntity().getProjectStateEntity().getCode())
+                .accountAuthority(entity.getAuthorityEntity().getCode())
                 .build());
     }
 }
