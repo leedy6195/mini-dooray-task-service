@@ -21,8 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service("projectService")
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -86,8 +84,16 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.delete(projectEntity);
     }
 
+
     @Override
     public Page<ProjectByAccountResponse> getProjectsByAccount(String accountId, Pageable pageable) {
-        return projectRepository.findProjectsByAccountId(accountId, pageable);
+        Page<ProjectAccountEntity> page = projectAccountRepository.findAllByPk_AccountId(accountId, pageable);
+
+        return page.map(entity -> ProjectByAccountResponse.builder()
+                .accountId(accountId)
+                .projectId(entity.getProjectEntity().getId())
+                .projectName(entity.getProjectEntity().getName())
+                .projectStateCode(entity.getAuthorityEntity().getCode())
+                .build());
     }
 }

@@ -1,10 +1,15 @@
 package com.nhn.minidooray.taskapi.entity;
 
 import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@NamedEntityGraph(name = "getProjectsByAccountId", attributeNodes = {
+    @NamedAttributeNode("projectEntity"),
+    @NamedAttributeNode("authorityEntity")
+})
 @Entity
 @Table(name = "project_account")
 @NoArgsConstructor
