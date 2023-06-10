@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface TagRepository extends JpaRepository<TagEntity, Long> {
-
+public interface TagRepository extends JpaRepository<TagEntity, Long>, TagCustomRepository {
     Optional<TagEntity> findByIdAndProjectEntity(Long id, ProjectEntity projectEntity);
 
-    Page<TagByProjectResponse> findByProjectEntity_IdEquals(Long projectId, Pageable pageable);
 }

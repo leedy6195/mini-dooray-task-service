@@ -63,6 +63,6 @@ public class TagServiceImpl implements TagService {
         projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("project"));
 
-        return tagRepository.findByProjectEntity_IdEquals(projectId, pageable);
+        return tagRepository.findTagsByProjectId(projectId, pageable);
     }
 }
