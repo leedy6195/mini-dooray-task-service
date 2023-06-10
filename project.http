@@ -102,6 +102,9 @@ Content-Type: application/json
 DELETE /project-api/projects/4/tags/1 HTTP/1.1
 Host: localhost:8081
 
+### 프로젝트의 태그 조회
+GET /project-api/projects/4/tags HTTP/1.1
+Host: localhost:8081
 
 ### 태스크 생성
 POST /project-api/projects/4/tasks HTTP/1.1
@@ -139,14 +142,27 @@ Host: localhost:8081
 DELETE /project-api/projects/4/tasks/3/tags/1 HTTP/1.1
 Host: localhost:8081
 
-### 태스크의 댓글 생성
-POST /project-api/projects/4/tasks/3/comments HTTP/1.1
+### 코멘트 생성
+POST /project-api/projects/10/tasks/3/comments HTTP/1.1
 Host: localhost:8081
 Content-Type: application/json
 
 {
   "parentId": null,
-  "taskId": 3,
   "writerId": "tester1",
   "content": "test comment1"
 }
+
+### 코멘트 수정
+PUT /project-api/projects/4/tasks/3/comments/4 HTTP/1.1
+Host: localhost:8081
+Content-Type: application/json
+
+{
+  "content": "test comment2"
+}
+
+### 코멘트 삭제
+DELETE /project-api/projects/4/tasks/3/comments/4 HTTP/1.1
+Host: localhost:8081
+

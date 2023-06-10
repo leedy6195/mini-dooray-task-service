@@ -2,12 +2,15 @@ package com.nhn.minidooray.taskapi.service;
 
 import com.nhn.minidooray.taskapi.domain.request.TagCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.TagUpdateRequest;
+import com.nhn.minidooray.taskapi.domain.response.TagByProjectResponse;
 import com.nhn.minidooray.taskapi.entity.ProjectEntity;
 import com.nhn.minidooray.taskapi.entity.TagEntity;
 import com.nhn.minidooray.taskapi.exception.NotFoundException;
 import com.nhn.minidooray.taskapi.repository.ProjectRepository;
 import com.nhn.minidooray.taskapi.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,5 +56,13 @@ public class TagServiceImpl implements TagService {
                 .orElseThrow(() -> new NotFoundException("tag"));
 
         tagRepository.delete(tagEntity);
+    }
+
+    @Override
+    public Page<TagByProjectResponse> findTagsByProjectId(Long projectId, Pageable pageable) {
+        projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("project"));
+
+        return tagRepository.findByProjectEntity_IdEquals(projectId, pageable);
     }
 }

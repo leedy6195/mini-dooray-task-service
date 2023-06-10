@@ -4,9 +4,11 @@ import com.nhn.minidooray.taskapi.domain.request.TagCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.TagUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.CommonResponse;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
+import com.nhn.minidooray.taskapi.domain.response.TagByProjectResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +54,11 @@ public class TagController {
             @PathVariable("tagId") Long tagId) {
         tagService.deleteTag(projectId, tagId);
         return ResultResponse.deleted(null);
+    }
+
+    @GetMapping("projects/{projectId}/tags")
+    public ResultResponse<List<TagByProjectResponse>> getTagsByProjectId(
+            @PathVariable("projectId") Long projectId, Pageable pageable) {
+        return ResultResponse.fetched(List.of(tagService.findTagsByProjectId(projectId, pageable).getContent()));
     }
 }

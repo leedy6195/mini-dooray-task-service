@@ -179,7 +179,7 @@ DELETE /project-api/projects/{projectId}
 		"resultMessage": "deleted successfully",
 		"successful": true
 	},
-	"result": [],
+	"result": null,
 	"totalCount": 0
 }
 ```
@@ -283,7 +283,7 @@ POST /project-api/projects/{projectId}/accounts
 		"resultMessage": "created successfully",
 		"successful": true
 	},
-	"result": [],
+	"result": null,
 	"totalCount": 0
 }
 
@@ -332,7 +332,7 @@ PUT /project-api/projects/{projectId}/accounts/{accountId}
 		"resultMessage": "updated successfully",
 		"successful": true
 	},
-	"result": [],
+	"result": null,
 	"totalCount": 0
 }
 
@@ -369,7 +369,7 @@ DELETE /project-api/projects/{projectId}/accounts/{accountId}
 		"resultMessage": "deleted successfully",
 		"successful": true
 	},
-	"result": [],
+	"result": null,
 	"totalCount": 0
 }
 ```
@@ -571,7 +571,7 @@ DELETE /project-api/projects/{projectId}/milestones/{milestoneId}
 		"resultMessage": "deleted successfully",
 		"successful": true
 	},
-	"result": [],
+	"result": null,
 	"totalCount": 0
 }
 ```
@@ -762,7 +762,7 @@ PUT /project-api/projects/{projectId}/tags/{tagId}
 		"resultMessage": "deleted successfully",
 		"successful": true
 	},
-	"result": [],
+	"result": null,
 	"totalCount": 0
 }
 ```
@@ -966,7 +966,7 @@ DELETE /project-api/projects/{projectId}/tasks/{taskId}
 		"resultMessage": "deleted successfully",
 		"successful": true
 	},
-	"result": [],
+	"result": null,
 	"totalCount": 0
 }
 ```
@@ -1022,7 +1022,6 @@ GET /project-api/projects/{projectId}/tasks
 {
     [추가]
 }
-
 ```
 ##### HTTP 응답 코드
 
