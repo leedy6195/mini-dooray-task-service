@@ -80,6 +80,10 @@ Content-Type: application/json
 DELETE /project-api/projects/4/milestones/1 HTTP/1.1
 Host: localhost:8081
 
+### 프로젝트의 마일스톤 조회
+GET /project-api/projects/4/milestones HTTP/1.1
+Host: localhost:8081
+
 ### 태그 생성
 POST /project-api/projects/4/tags HTTP/1.1
 Host: localhost:8081

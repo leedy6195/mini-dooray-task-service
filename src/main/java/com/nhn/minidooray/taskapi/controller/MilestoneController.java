@@ -3,10 +3,13 @@ package com.nhn.minidooray.taskapi.controller;
 import com.nhn.minidooray.taskapi.domain.request.MilestoneCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.MilestoneUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.CommonResponse;
+import com.nhn.minidooray.taskapi.domain.response.MilestoneByProjectResponse;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.MilestoneService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +55,12 @@ public class MilestoneController {
             @PathVariable("milestoneId") Long milestoneId) {
         milestoneService.deleteMilestone(milestoneId);
         return ResultResponse.deleted(null);
+    }
+
+    @GetMapping("/projects/{projectId}/milestones")
+    public ResultResponse<Page<MilestoneByProjectResponse>> getMilestonesByProject(
+            @PathVariable("projectId") Long projectId, Pageable pageable) {
+        Page<MilestoneByProjectResponse> milestoneByProjectResponses = milestoneService.findMilestonesByProject(projectId, pageable);
+        return ResultResponse.fetched(List.of(milestoneByProjectResponses));
     }
 }

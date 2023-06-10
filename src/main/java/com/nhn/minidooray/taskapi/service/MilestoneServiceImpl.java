@@ -2,12 +2,15 @@ package com.nhn.minidooray.taskapi.service;
 
 import com.nhn.minidooray.taskapi.domain.request.MilestoneCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.MilestoneUpdateRequest;
+import com.nhn.minidooray.taskapi.domain.response.MilestoneByProjectResponse;
 import com.nhn.minidooray.taskapi.entity.MilestoneEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectEntity;
 import com.nhn.minidooray.taskapi.exception.NotFoundException;
 import com.nhn.minidooray.taskapi.repository.MilestoneRepository;
 import com.nhn.minidooray.taskapi.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,5 +53,13 @@ public class MilestoneServiceImpl implements MilestoneService {
                 .orElseThrow(() -> new NotFoundException("milestone"));
 
         milestoneRepository.delete(milestoneEntity);
+    }
+
+    @Override
+    public Page<MilestoneByProjectResponse> findMilestonesByProject(Long projectId, Pageable pageable) {
+        projectRepository.findById(projectId)
+                .orElseThrow(() -> new NotFoundException("project"));
+
+        return milestoneRepository.findMilestoneByProject(projectId, pageable);
     }
 }
