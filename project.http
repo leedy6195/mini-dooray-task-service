@@ -4,8 +4,8 @@ Host: localhost:8081
 Content-Type: application/json
 
 {
-  "accountId": "tester10",
-  "projectName": "test project10"
+  "accountId": "tester20",
+  "projectName": "test project20"
 }
 
 ### 프로젝트 수정
