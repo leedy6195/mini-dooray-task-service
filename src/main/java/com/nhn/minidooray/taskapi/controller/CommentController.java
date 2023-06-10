@@ -21,17 +21,19 @@ public class CommentController {
 
     @PostMapping("${com.nhn.minidooray.taskapi.requestmapping.create-comment}")
     public ResultResponse<CommonResponse> createComment(
+            @PathVariable("taskId") Long taskId,
             @RequestBody @Valid CommentCreateRequest commentCreateRequest,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
-        Long commentId = commentService.createComment(commentCreateRequest);
+        Long commentId = commentService.createComment(taskId, commentCreateRequest);
         return ResultResponse.created(List.of(CommonResponse.builder().id(commentId).build()));
     }
 
     @PutMapping("${com.nhn.minidooray.taskapi.requestmapping.update-comment}")
     public ResultResponse<CommonResponse> updateComment(
+            @PathVariable("taskId") Long taskId,
             @PathVariable("commentId") Long commentId,
             @RequestBody @Valid CommentUpdateRequest commentUpdateRequest,
             BindingResult bindingResult) {

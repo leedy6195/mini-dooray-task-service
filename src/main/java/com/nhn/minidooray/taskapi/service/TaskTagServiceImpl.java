@@ -20,20 +20,20 @@ public class TaskTagServiceImpl implements TaskTagService {
     private final TagRepository tagRepository;
 
     @Override
-    public void createTaskTag(TaskTagCreateRequest taskTagCreateRequest) {
-        taskTagRepository.findById(TaskTagEntity.Pk.builder().tagId(taskTagCreateRequest.getTagId()).taskId(taskTagCreateRequest.getTaskId()).build()).ifPresent(taskTagEntity -> {
+    public void createTaskTag(Long taskId, Long tagId) {
+        taskTagRepository.findById(TaskTagEntity.Pk.builder().tagId(tagId).build()).ifPresent(taskTagEntity -> {
             throw new AlreadyExistsException("taskTag");
         });
-        TaskEntity taskEntity = taskRepository.findById(taskTagCreateRequest.getTaskId())
+        TaskEntity taskEntity = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("task"));
-        TagEntity tagEntity = tagRepository.findById(taskTagCreateRequest.getTagId())
+        TagEntity tagEntity = tagRepository.findById(tagId)
                 .orElseThrow(() -> new NotFoundException("tag"));
 
         taskTagRepository.save(
             TaskTagEntity.builder()
                     .pk(TaskTagEntity.Pk.builder()
-                            .tagId(taskTagCreateRequest.getTagId())
-                            .taskId(taskTagCreateRequest.getTaskId())
+                            .tagId(tagId)
+                            .taskId(taskId)
                             .build())
                     .taskEntity(taskEntity)
                     .tagEntity(tagEntity)

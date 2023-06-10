@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "tag")
 @Entity
@@ -24,6 +25,9 @@ public class TagEntity implements Updatable<TagUpdateRequest> {
     private String name;
 
     private LocalDateTime createAt;
+
+    @OneToMany(mappedBy = "tagEntity", cascade = CascadeType.REMOVE)
+    private List<TaskTagEntity> taskTagEntities;
 
     @PrePersist
     public void setCreateAt() { this.createAt = LocalDateTime.now(); }

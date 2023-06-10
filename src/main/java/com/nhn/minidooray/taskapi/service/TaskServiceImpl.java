@@ -3,10 +3,12 @@ package com.nhn.minidooray.taskapi.service;
 import com.nhn.minidooray.taskapi.domain.request.TaskCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.TaskUpdateRequest;
 import com.nhn.minidooray.taskapi.entity.MilestoneEntity;
+import com.nhn.minidooray.taskapi.entity.ProjectAccountEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectEntity;
 import com.nhn.minidooray.taskapi.entity.TaskEntity;
 import com.nhn.minidooray.taskapi.exception.NotFoundException;
 import com.nhn.minidooray.taskapi.repository.MilestoneRepository;
+import com.nhn.minidooray.taskapi.repository.ProjectAccountRepository;
 import com.nhn.minidooray.taskapi.repository.ProjectRepository;
 import com.nhn.minidooray.taskapi.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +21,31 @@ import org.springframework.transaction.annotation.Transactional;
 public class TaskServiceImpl implements TaskService {
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
+    private final ProjectAccountRepository projectAccountRepository;
     private final MilestoneRepository milestoneRepository;
+
     @Override
     @Transactional
     public Long createTask(TaskCreateRequest taskCreateRequest) {
+        MilestoneEntity milestoneEntity = null;
         ProjectEntity projectEntity = projectRepository.findById(taskCreateRequest.getProjectId())
                 .orElseThrow(() -> new NotFoundException("project"));
-        MilestoneEntity milestoneEntity = milestoneRepository.findById(taskCreateRequest.getMilestoneId())
-                .orElseThrow(() -> new NotFoundException("milestone"));
+        if (taskCreateRequest.getMilestoneId() != null) {
+            milestoneEntity = milestoneRepository.findById(taskCreateRequest.getMilestoneId())
+                    .orElseThrow(() -> new NotFoundException("milestone"));
+        }
+
+        //프로젝트에 속한 회원인지 검사
+        projectAccountRepository.findByPk(ProjectAccountEntity.Pk.builder()
+                        .projectId(taskCreateRequest.getProjectId())
+                        .accountId(taskCreateRequest.getWriterId()).build())
+                .orElseThrow(() -> new NotFoundException("projectAccount"));
 
         return taskRepository.save(TaskEntity.builder().name(taskCreateRequest.getName())
-                        .writerId(taskCreateRequest.getWriterId())
-                        .projectEntity(projectEntity)
-                        .milestoneEntity(milestoneEntity)
-                        .build()).getId();
+                .writerId(taskCreateRequest.getWriterId())
+                .projectEntity(projectEntity)
+                .milestoneEntity(milestoneEntity)
+                .build()).getId();
     }
 
     @Override
@@ -44,6 +57,13 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new NotFoundException("project"));
         MilestoneEntity milestoneEntity = milestoneRepository.findById(taskUpdateRequest.getMilestoneId())
                 .orElseThrow(() -> new NotFoundException("milestone"));
+
+        //프로젝트에 속한 회원으로의 변경인지 검사
+        projectAccountRepository.findByPk(ProjectAccountEntity.Pk.builder()
+                        .projectId(taskUpdateRequest.getProjectId())
+                        .accountId(taskUpdateRequest.getWriterId()).build())
+                .orElseThrow(() -> new NotFoundException("projectAccount"));
+
 
         taskEntity.update(taskUpdateRequest.getName(), projectEntity, taskUpdateRequest.getWriterId(), milestoneEntity);
         return taskRepository.save(taskEntity).getId();

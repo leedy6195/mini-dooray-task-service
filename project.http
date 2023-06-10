@@ -80,3 +80,73 @@ Content-Type: application/json
 DELETE /project-api/projects/4/milestones/1 HTTP/1.1
 Host: localhost:8081
 
+### 태그 생성
+POST /project-api/projects/4/tags HTTP/1.1
+Host: localhost:8081
+Content-Type: application/json
+
+{
+  "name": "test tag1"
+}
+
+### 태그 수정
+PUT /project-api/projects/4/tags/1 HTTP/1.1
+Host: localhost:8081
+Content-Type: application/json
+
+{
+  "name": "test tag3"
+}
+
+### 태그 삭제
+DELETE /project-api/projects/4/tags/1 HTTP/1.1
+Host: localhost:8081
+
+
+### 태스크 생성
+POST /project-api/projects/4/tasks HTTP/1.1
+Host: localhost:8081
+Content-Type: application/json
+
+{
+  "name": "test task1",
+  "projectId": 4,
+  "writerId": "tester1",
+  "milestoneId": 1
+}
+
+### 태스크 수정
+PUT /project-api/projects/4/tasks/2 HTTP/1.1
+Host: localhost:8081
+Content-Type: application/json
+
+{
+  "name": "test task1",
+  "projectId": 4,
+  "writerId": "testerX",
+  "milestoneId": 1
+}
+
+### 태스크 삭제
+DELETE /project-api/projects/4/tasks/2 HTTP/1.1
+Host: localhost:8081
+
+### 태스크에 태그 걸기
+POST /project-api/projects/4/tasks/3/tags/1 HTTP/1.1
+Host: localhost:8081
+
+### 태스크에 걸린 태그 제거
+DELETE /project-api/projects/4/tasks/3/tags/1 HTTP/1.1
+Host: localhost:8081
+
+### 태스크의 댓글 생성
+POST /project-api/projects/4/tasks/3/comments HTTP/1.1
+Host: localhost:8081
+Content-Type: application/json
+
+{
+  "parentId": null,
+  "taskId": 3,
+  "writerId": "tester1",
+  "content": "test comment1"
+}

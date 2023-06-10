@@ -4,7 +4,7 @@ import com.nhn.minidooray.taskapi.domain.request.CommentCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.CommentUpdateRequest;
 
 public interface CommentService {
-    Long createComment(CommentCreateRequest commentCreateRequest);
+    Long createComment(Long taskId, CommentCreateRequest commentCreateRequest);
     Long updateComment(Long commentId, CommentUpdateRequest commentUpdateRequest);
     void deleteComment(Long commentId);
 }

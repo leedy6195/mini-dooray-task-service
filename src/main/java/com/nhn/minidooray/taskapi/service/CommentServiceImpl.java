@@ -17,13 +17,13 @@ public class CommentServiceImpl implements CommentService {
     private final TaskRepository taskRepository;
 
     @Override
-    public Long createComment(CommentCreateRequest commentCreateRequest) {
+    public Long createComment(Long taskId, CommentCreateRequest commentCreateRequest) {
         CommentEntity parent = null;
         if (commentCreateRequest.getParentId() != null) {
             parent = commentRepository.findById(commentCreateRequest.getParentId())
                     .orElseThrow(() -> new NotFoundException("comment"));
         }
-        TaskEntity taskEntity = taskRepository.findById(commentCreateRequest.getTaskId()).orElseThrow(() -> new NotFoundException("task"));
+        TaskEntity taskEntity = taskRepository.findById(taskId).orElseThrow(() -> new NotFoundException("task"));
 
         CommentEntity commentEntity = CommentEntity.builder()
                 .content(commentCreateRequest.getContent())
