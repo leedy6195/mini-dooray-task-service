@@ -1,17 +1,19 @@
 package com.nhn.minidooray.taskapi.entity;
 
+import com.nhn.minidooray.taskapi.domain.request.CommentUpdateRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Table(name = "comment")
 @Entity
 @Getter
 @NoArgsConstructor
-public class CommentEntity {
+public class CommentEntity implements Updatable<CommentUpdateRequest> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,5 +43,11 @@ public class CommentEntity {
         this.taskEntity = taskEntity;
         this.writerId = writerId;
         this.content = content;
+    }
+
+    @Override
+    public void update(CommentUpdateRequest commentUpdateRequest) {
+        if (Objects.nonNull(commentUpdateRequest.getContent())) this.content = commentUpdateRequest.getContent();
+
     }
 }

@@ -37,11 +37,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Long updateComment(Long commentId, CommentUpdateRequest commentUpdateRequest) {
-        return null;
+        CommentEntity commentEntity = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("comment"));
+        commentEntity.update(commentUpdateRequest);
+        return commentRepository.save(commentEntity).getId();
     }
 
     @Override
     public void deleteComment(Long commentId) {
-
+        CommentEntity commentEntity = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("comment"));
+        commentRepository.delete(commentEntity);
     }
 }
