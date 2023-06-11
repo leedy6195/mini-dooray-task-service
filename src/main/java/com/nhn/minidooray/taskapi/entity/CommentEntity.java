@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Table(name = "comment")
@@ -31,6 +32,9 @@ public class CommentEntity implements Updatable<CommentUpdateRequest> {
     private String content;
 
     private LocalDateTime createAt;
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    private List<CommentEntity> children;
 
     @PrePersist
     public void setCreateAt() {

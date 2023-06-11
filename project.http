@@ -151,14 +151,14 @@ DELETE /project-api/projects/4/tasks/3/tags/1 HTTP/1.1
 Host: localhost:8081
 
 ### 코멘트 생성
-POST /project-api/projects/10/tasks/3/comments HTTP/1.1
+POST /project-api/projects/4/tasks/3/comments HTTP/1.1
 Host: localhost:8081
 Content-Type: application/json
 
 {
-  "parentId": null,
+  "parentId": 3,
   "writerId": "tester1",
-  "content": "test comment1"
+  "content": "test comment13"
 }
 
 ### 코멘트 수정
@@ -174,3 +174,6 @@ Content-Type: application/json
 DELETE /project-api/projects/4/tasks/3/comments/4 HTTP/1.1
 Host: localhost:8081
 
+### 코멘트 조회
+GET /project-api/projects/4/tasks/3/comments HTTP/1.1
+Host: localhost:8081

@@ -2,12 +2,15 @@ package com.nhn.minidooray.taskapi.service;
 
 import com.nhn.minidooray.taskapi.domain.request.CommentCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.CommentUpdateRequest;
+import com.nhn.minidooray.taskapi.domain.response.CommentByTaskResponse;
 import com.nhn.minidooray.taskapi.entity.CommentEntity;
 import com.nhn.minidooray.taskapi.entity.TaskEntity;
 import com.nhn.minidooray.taskapi.exception.NotFoundException;
 import com.nhn.minidooray.taskapi.repository.CommentRepository;
 import com.nhn.minidooray.taskapi.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,4 +52,12 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundException("comment"));
         commentRepository.delete(commentEntity);
     }
+
+    @Override
+    public Page<CommentByTaskResponse> getCommentsByTaskId(Long taskId, Pageable pageable) {
+        taskRepository.findById(taskId).orElseThrow(() -> new NotFoundException("task"));
+        return commentRepository.findCommentsByTaskId(taskId, pageable);
+    }
+
+
 }

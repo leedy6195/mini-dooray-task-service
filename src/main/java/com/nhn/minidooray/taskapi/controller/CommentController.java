@@ -2,11 +2,14 @@ package com.nhn.minidooray.taskapi.controller;
 
 import com.nhn.minidooray.taskapi.domain.request.CommentCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.CommentUpdateRequest;
+import com.nhn.minidooray.taskapi.domain.response.CommentByTaskResponse;
 import com.nhn.minidooray.taskapi.domain.response.CommonResponse;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,5 +52,12 @@ public class CommentController {
             @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(commentId);
         return ResultResponse.deleted(null);
+    }
+
+    @GetMapping("${com.nhn.minidooray.taskapi.requestmapping.get-comments}")
+    public ResultResponse<Page<CommentByTaskResponse>> getComments(
+            @PathVariable("taskId") Long taskId, Pageable pageable) {
+        Page<CommentByTaskResponse> comments = commentService.getCommentsByTaskId(taskId, pageable);
+        return ResultResponse.fetched(List.of(comments));
     }
 }
