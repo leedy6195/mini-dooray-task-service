@@ -4,6 +4,7 @@ import com.nhn.minidooray.taskapi.domain.request.ProjectCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.CommonResponse;
 import com.nhn.minidooray.taskapi.domain.response.ProjectByAccountResponse;
+import com.nhn.minidooray.taskapi.domain.response.ProjectResponse;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.ProjectService;
@@ -59,5 +60,11 @@ public class ProjectController {
     public ResultResponse<Page<ProjectByAccountResponse>> getProjects(@PathVariable("accountId") String accountId, Pageable pageable) {
         Page<ProjectByAccountResponse> projects = projectService.getProjectsByAccount(accountId, pageable);
         return ResultResponse.fetched(List.of(projects));
+    }
+
+    @GetMapping("${com.nhn.minidooray.taskapi.requestmapping.get-project}")
+    public ResultResponse<ProjectResponse> getProject(@PathVariable("projectId") Long projectId) {
+        ProjectResponse project = projectService.getProject(projectId);
+        return ResultResponse.fetched(List.of(project));
     }
 }

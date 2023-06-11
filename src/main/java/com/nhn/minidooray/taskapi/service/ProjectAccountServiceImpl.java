@@ -18,8 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service("projectAccountService")
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -99,6 +97,6 @@ public class ProjectAccountServiceImpl implements ProjectAccountService {
                         .projectId(projectId)
                         .accountId(accountId)
                         .build())
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException("ProjectAccountResponse"));
     }
 }

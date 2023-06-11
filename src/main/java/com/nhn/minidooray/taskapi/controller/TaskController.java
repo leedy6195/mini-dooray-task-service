@@ -5,9 +5,12 @@ import com.nhn.minidooray.taskapi.domain.request.TaskCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.TaskUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.CommonResponse;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
+import com.nhn.minidooray.taskapi.domain.response.TasksResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,13 @@ import java.util.List;
 @RequestMapping("${com.nhn.minidooray.taskapi.requestmapping.prefix}")
 public class TaskController {
     private final TaskService taskService;
+
+    @GetMapping("${com.nhn.minidooray.taskapi.requestmapping.get-tasks}")
+    public ResultResponse<Page<TasksResponse>> getTasks(@PathVariable("projectId") Long projectId, Pageable pageable) {
+        Page<TasksResponse> tasks = taskService.getTasks(projectId, pageable);
+
+        return ResultResponse.fetched(List.of(tasks));
+    }
 
     @PostMapping("${com.nhn.minidooray.taskapi.requestmapping.create-task}")
     public ResultResponse<CommonResponse> createTask(

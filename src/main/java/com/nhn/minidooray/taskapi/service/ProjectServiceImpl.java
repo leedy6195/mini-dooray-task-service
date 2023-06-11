@@ -3,6 +3,7 @@ package com.nhn.minidooray.taskapi.service;
 import com.nhn.minidooray.taskapi.domain.request.ProjectCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.ProjectUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.ProjectByAccountResponse;
+import com.nhn.minidooray.taskapi.domain.response.ProjectResponse;
 import com.nhn.minidooray.taskapi.entity.AuthorityEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectAccountEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectEntity;
@@ -96,5 +97,11 @@ public class ProjectServiceImpl implements ProjectService {
                 .projectStateCode(entity.getProjectEntity().getProjectStateEntity().getCode())
                 .accountAuthority(entity.getAuthorityEntity().getCode())
                 .build());
+    }
+
+    @Override
+    public ProjectResponse getProject(Long projectId) {
+        return projectRepository.findProjectResponseById(projectId)
+                .orElseThrow(() -> new NotFoundException("project"));
     }
 }

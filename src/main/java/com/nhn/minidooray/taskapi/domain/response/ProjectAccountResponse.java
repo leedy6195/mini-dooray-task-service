@@ -1,8 +1,10 @@
 package com.nhn.minidooray.taskapi.domain.response;
 
-public interface ProjectAccountResponse {
-    Long getProjectEntity();
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    String getAuthorityEntity();
+public interface ProjectAccountResponse {
+
+    @JsonProperty("code")
+    String getAuthorityEntityCode();
 
 }

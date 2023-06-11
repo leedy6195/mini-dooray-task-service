@@ -2,6 +2,7 @@ package com.nhn.minidooray.taskapi.service;
 
 import com.nhn.minidooray.taskapi.domain.request.TaskCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.TaskUpdateRequest;
+import com.nhn.minidooray.taskapi.domain.response.TasksResponse;
 import com.nhn.minidooray.taskapi.entity.MilestoneEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectAccountEntity;
 import com.nhn.minidooray.taskapi.entity.ProjectEntity;
@@ -12,6 +13,8 @@ import com.nhn.minidooray.taskapi.repository.ProjectAccountRepository;
 import com.nhn.minidooray.taskapi.repository.ProjectRepository;
 import com.nhn.minidooray.taskapi.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
                         .accountId(taskCreateRequest.getWriterId()).build())
                 .orElseThrow(() -> new NotFoundException("projectAccount"));
 
-        return taskRepository.save(TaskEntity.builder().name(taskCreateRequest.getName())
+        return taskRepository.save(TaskEntity.builder().title(taskCreateRequest.getName())
                 .writerId(taskCreateRequest.getWriterId())
                 .projectEntity(projectEntity)
                 .milestoneEntity(milestoneEntity)
@@ -75,5 +78,10 @@ public class TaskServiceImpl implements TaskService {
         TaskEntity taskEntity = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("task"));
         taskRepository.delete(taskEntity);
+    }
+
+    @Override
+    public Page<TasksResponse> getTasks(Long projectId, Pageable pageable) {
+        return taskRepository.findAllByProjectEntity_Id(projectId, pageable);
     }
 }

@@ -1,6 +1,5 @@
 package com.nhn.minidooray.taskapi.entity;
 
-import com.nhn.minidooray.taskapi.domain.request.TaskUpdateRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,8 @@ public class TaskEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String title;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
@@ -43,15 +43,15 @@ public class TaskEntity {
     }
 
     @Builder
-    public TaskEntity(String name, ProjectEntity projectEntity, String writerId, MilestoneEntity milestoneEntity) {
-        this.name = name;
+    public TaskEntity(String title, ProjectEntity projectEntity, String writerId, MilestoneEntity milestoneEntity) {
+        this.title = title;
         this.projectEntity = projectEntity;
         this.writerId = writerId;
         this.milestoneEntity = milestoneEntity;
     }
 
-    public void update(String name, ProjectEntity projectEntity, String writerId, MilestoneEntity milestoneEntity) {
-        this.name = name == null ? this.name : name;
+    public void update(String title, ProjectEntity projectEntity, String writerId, MilestoneEntity milestoneEntity) {
+        this.title = title == null ? this.title : title;
         this.projectEntity = projectEntity == null ? this.projectEntity : projectEntity;
         this.writerId = writerId == null ? this.writerId : writerId;
         this.milestoneEntity = milestoneEntity == null ? this.milestoneEntity : milestoneEntity;
