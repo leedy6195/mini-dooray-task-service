@@ -110,6 +110,10 @@ Host: localhost:8081
 GET /project-api/projects/4/tags HTTP/1.1
 Host: localhost:8081
 
+### 태스크의 태그 조회
+GET /project-api/projects/4/tasks/3/tags HTTP/1.1
+Host: localhost:8081
+
 ### 태스크 생성
 POST /project-api/projects/4/tasks HTTP/1.1
 Host: localhost:8081

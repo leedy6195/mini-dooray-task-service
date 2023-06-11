@@ -1,9 +1,6 @@
 package com.nhn.minidooray.taskapi.entity;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Table(name = "task_tag")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class TaskTagEntity {
     @EmbeddedId

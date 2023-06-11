@@ -1,7 +1,9 @@
 package com.nhn.minidooray.taskapi.repository;
 
 import com.nhn.minidooray.taskapi.domain.response.TagByProjectResponse;
+import com.nhn.minidooray.taskapi.domain.response.TagByTaskResponse;
 import com.nhn.minidooray.taskapi.entity.QTagEntity;
+import com.nhn.minidooray.taskapi.entity.QTaskTagEntity;
 import com.nhn.minidooray.taskapi.entity.TagEntity;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
@@ -25,6 +27,26 @@ public class TagRepositoryImpl extends QuerydslRepositorySupport implements TagC
                 .select(Projections.fields(
                         TagByProjectResponse.class,
                         tagEntity.projectEntity.id.as("projectId"),
+                        tagEntity.id.as("tagId"),
+                        tagEntity.name.as("tagName")
+                ))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+    }
+
+    @Override
+    public Page<TagByTaskResponse> findTagsByTaskId(Long taskId, Pageable pageable) {
+        QTaskTagEntity taskTagEntity = QTaskTagEntity.taskTagEntity;
+        QTagEntity tagEntity = QTagEntity.tagEntity;
+        QueryResults<TagByTaskResponse> results = from(taskTagEntity)
+                .leftJoin(taskTagEntity.tagEntity, tagEntity)
+                .where(taskTagEntity.taskEntity.id.eq(taskId))
+                .select(Projections.fields(
+                        TagByTaskResponse.class,
+                        taskTagEntity.taskEntity.id.as("taskId"),
                         tagEntity.id.as("tagId"),
                         tagEntity.name.as("tagName")
                 ))

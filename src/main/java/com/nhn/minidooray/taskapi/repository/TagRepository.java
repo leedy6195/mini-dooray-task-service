@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface TagRepository extends JpaRepository<TagEntity, Long>, TagCustomRepository {
     Optional<TagEntity> findByIdAndProjectEntity(Long id, ProjectEntity projectEntity);
 
+
 }

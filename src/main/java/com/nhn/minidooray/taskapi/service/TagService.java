@@ -3,6 +3,7 @@ package com.nhn.minidooray.taskapi.service;
 import com.nhn.minidooray.taskapi.domain.request.TagCreateRequest;
 import com.nhn.minidooray.taskapi.domain.request.TagUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.TagByProjectResponse;
+import com.nhn.minidooray.taskapi.domain.response.TagByTaskResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,4 +12,6 @@ public interface TagService {
     Long updateTag(Long projectId, Long tagId, TagUpdateRequest tagUpdateRequest);
     void deleteTag(Long projectId, Long tagId);
     Page<TagByProjectResponse> findTagsByProjectId(Long projectId, Pageable pageable);
+
+    Page<TagByTaskResponse> findTagsByTaskId(Long taskId, Pageable pageable);
 }

@@ -5,6 +5,7 @@ import com.nhn.minidooray.taskapi.domain.request.TagUpdateRequest;
 import com.nhn.minidooray.taskapi.domain.response.CommonResponse;
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
 import com.nhn.minidooray.taskapi.domain.response.TagByProjectResponse;
+import com.nhn.minidooray.taskapi.domain.response.TagByTaskResponse;
 import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
 import com.nhn.minidooray.taskapi.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -56,9 +57,16 @@ public class TagController {
         return ResultResponse.deleted(null);
     }
 
-    @GetMapping("projects/{projectId}/tags")
+    @GetMapping("/projects/{projectId}/tags")
     public ResultResponse<List<TagByProjectResponse>> getTagsByProjectId(
             @PathVariable("projectId") Long projectId, Pageable pageable) {
         return ResultResponse.fetched(List.of(tagService.findTagsByProjectId(projectId, pageable).getContent()));
+    }
+
+    @GetMapping("/projects/{projectId}/tasks/{taskId}/tags")
+    public ResultResponse<List<TagByTaskResponse>> getTagsByTaskId(
+            @PathVariable("taskId") Long taskId,
+            Pageable pageable) {
+        return ResultResponse.fetched(List.of(tagService.findTagsByTaskId(taskId, pageable).getContent()));
     }
 }
