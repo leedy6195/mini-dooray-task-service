@@ -63,7 +63,7 @@ public class ProjectAccountServiceImpl implements ProjectAccountService {
                                 .projectId(projectId)
                                 .accountId(accountId)
                                 .build())
-                .orElseThrow(() -> new NotFoundException("project"));
+                .orElseThrow(() -> new NotFoundException("projectAccount"));
 
         AuthorityEntity authorityEntity = authorityRepository.findById(projectAccountUpdateRequest.getAuthorityCode())
                 .orElseThrow(() -> new NotFoundException("authority"));
