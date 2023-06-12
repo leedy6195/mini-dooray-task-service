@@ -1,11 +1,13 @@
 package com.nhn.minidooray.taskapi.domain.response;
 
 import com.nhn.minidooray.taskapi.enumerate.AuthorityType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Data
+@Builder
 @NoArgsConstructor
 public class AccountByProjectResponse {
     private Long projectId;
