@@ -4,7 +4,6 @@ import com.nhn.minidooray.taskapi.domain.response.CommentByTaskResponse;
 import com.nhn.minidooray.taskapi.entity.CommentEntity;
 import com.nhn.minidooray.taskapi.entity.QCommentEntity;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

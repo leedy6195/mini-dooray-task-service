@@ -73,11 +73,13 @@ CREATE TABLE IF NOT EXISTS `nhn_academy_2`.`MILE_STONE`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `nhn_academy_2`.`TASK`
 (
-    `ID`            INT         NOT NULL AUTO_INCREMENT,
-    `PROJECT_ID`    INT         NOT NULL,
-    `WRITER_ID`     VARCHAR(40) NOT NULL,
-    `MILE_STONE_ID` INT         NULL,
-    `CREATE_AT`     DATETIME    NOT NULL DEFAULT NOW(),
+    `ID`            INT             NOT NULL AUTO_INCREMENT,
+    `PROJECT_ID`    INT             NOT NULL,
+    `WRITER_ID`     VARCHAR(40)     NOT NULL,
+    `MILE_STONE_ID` INT             NULL,
+    `TITLE`         VARCHAR(200)    NOT NULL,
+    `CONTENT`       TEXT            NOT NULL,
+    `CREATE_AT`     DATETIME        NOT NULL DEFAULT NOW(),
     PRIMARY KEY (`ID`),
     INDEX `fk_TASK_PROJECT1_idx` (`PROJECT_ID` ASC) VISIBLE,
     INDEX `fk_TASK_ACCOUNT1_idx` (`WRITER_ID` ASC) VISIBLE,
