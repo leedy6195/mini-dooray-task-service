@@ -141,7 +141,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    @DisplayName("업데이트 성공")
+    @DisplayName("프로젝트 업데이트 성공")
     void updateProject_o() {
         // given
         ProjectUpdateRequest projectUpdateRequest =
@@ -171,7 +171,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    @DisplayName("업데이트 실패 (project 미설정)")
+    @DisplayName("프로젝트 업데이트 실패 (project 미설정)")
     void updateProject_x_projectNotExist() {
         // given
         ProjectUpdateRequest projectUpdateRequest =
@@ -187,7 +187,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    @DisplayName("업데이트 실패 (projectState 미설정)")
+    @DisplayName("프로젝트 업데이트 실패 (projectState 미설정)")
     void updateProject_x_projectStateNotExist() {
         // given
         ProjectUpdateRequest projectUpdateRequest =

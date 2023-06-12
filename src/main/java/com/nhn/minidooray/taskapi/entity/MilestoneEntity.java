@@ -36,7 +36,8 @@ public class MilestoneEntity implements Updatable<MilestoneUpdateRequest> {
     }
 
     @Builder
-    public MilestoneEntity(ProjectEntity projectEntity, String name, LocalDate startDate, LocalDate endDate) {
+    public MilestoneEntity(Long id, ProjectEntity projectEntity, String name, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
         this.projectEntity = projectEntity;
         this.name = name;
         this.startDate = startDate;
@@ -46,7 +47,7 @@ public class MilestoneEntity implements Updatable<MilestoneUpdateRequest> {
     @Override
     public void update(MilestoneUpdateRequest milestoneUpdateRequest) {
         this.name = milestoneUpdateRequest.getName();
-        this.startDate = LocalDate.parse(milestoneUpdateRequest.getStartDate());
-        this.endDate = LocalDate.parse(milestoneUpdateRequest.getEndDate());
+        this.startDate = milestoneUpdateRequest.getStartDate();
+        this.endDate = milestoneUpdateRequest.getEndDate();
     }
 }
