@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,17 +15,15 @@ public class CommentByTaskResponse {
     private Long commentId;
     private String commentWriter;
     private String commentContent;
-    private LocalDate commentCreateAt;
+    private LocalDateTime commentCreateAt;
     private Long parentCommentId;
-    private List<CommentByTaskResponse> children;
 
-    public CommentByTaskResponse(Long taskId, Long commentId, String commentWriter, String commentContent, LocalDate commentCreateAt, Long parentCommentId, List<CommentByTaskResponse> children) {
+    public CommentByTaskResponse(Long taskId, Long commentId, String commentWriter, String commentContent, LocalDateTime commentCreateAt, Long parentCommentId) {
         this.taskId = taskId;
         this.commentId = commentId;
         this.commentWriter = commentWriter;
         this.commentContent = commentContent;
         this.commentCreateAt = commentCreateAt;
         this.parentCommentId = parentCommentId;
-        this.children = children;
     }
 }

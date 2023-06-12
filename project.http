@@ -156,9 +156,9 @@ Host: localhost:8081
 Content-Type: application/json
 
 {
-  "parentId": 3,
+  "parentId": 5,
   "writerId": "tester1",
-  "content": "test comment13"
+  "content": "test comment14"
 }
 
 ### 코멘트 수정

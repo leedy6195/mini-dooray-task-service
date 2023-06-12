@@ -11,8 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommentRepositoryImpl extends QuerydslRepositorySupport implements CommentCustomRepository {
     public CommentRepositoryImpl() {
@@ -22,43 +20,22 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
     @Override
     public Page<CommentByTaskResponse> findCommentsByTaskId(Long taskId, Pageable pageable) {
         QCommentEntity commentEntity = QCommentEntity.commentEntity;
-        QCommentEntity subCommentEntity = new QCommentEntity("subCommentEntity");
-
-        QueryResults<Tuple> results = from(commentEntity)
-                .leftJoin(commentEntity.children, subCommentEntity).fetchJoin()
+        QueryResults<CommentByTaskResponse> results = from(commentEntity)
                 .where(commentEntity.taskEntity.id.eq(taskId))
-                .select(commentEntity, subCommentEntity)
+                .select(Projections.fields(
+                        CommentByTaskResponse.class,
+                        commentEntity.taskEntity.id.as("taskId"),
+                        commentEntity.id.as("commentId"),
+                        commentEntity.writerId.as("commentWriter"),
+                        commentEntity.content.as("commentContent"),
+                        commentEntity.createAt.as("commentCreateAt"),
+                        commentEntity.parentComment.id.as("parentCommentId")
+                ))
+                .orderBy(commentEntity.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
-        List<CommentByTaskResponse> commentResponses = results.getResults().stream()
-                .map(tuple -> {
-                    CommentEntity comment = tuple.get(commentEntity);
-                    CommentEntity subComment = tuple.get(subCommentEntity);
-
-                    CommentByTaskResponse commentResponse = new CommentByTaskResponse();
-                    commentResponse.setTaskId(comment.getTaskEntity().getId());
-                    commentResponse.setCommentId(comment.getId());
-                    commentResponse.setCommentWriter(comment.getWriterId());
-                    commentResponse.setCommentContent(comment.getContent());
-                    commentResponse.setCommentCreateAt(comment.getCreateAt().toLocalDate());
-                    commentResponse.setParentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null);
-
-                    if (subComment != null) {
-                        CommentByTaskResponse subCommentResponse = new CommentByTaskResponse();
-                        subCommentResponse.setCommentId(subComment.getId());
-                        subCommentResponse.setCommentContent(subComment.getContent());
-                        subCommentResponse.setParentCommentId(subComment.getParentComment() != null ? subComment.getParentComment().getId() : null);
-
-                        commentResponse.getChildren().add(subCommentResponse);
-                    }
-
-                    return commentResponse;
-                })
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(commentResponses, pageable, results.getTotal());
-
+        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
 }
