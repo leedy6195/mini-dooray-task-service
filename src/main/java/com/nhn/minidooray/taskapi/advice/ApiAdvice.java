@@ -2,9 +2,6 @@ package com.nhn.minidooray.taskapi.advice;
 
 import com.nhn.minidooray.taskapi.domain.response.ResultResponse;
 import com.nhn.minidooray.taskapi.exception.ApiException;
-import com.nhn.minidooray.taskapi.exception.NotFoundException;
-import com.nhn.minidooray.taskapi.exception.ValidationFailedException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

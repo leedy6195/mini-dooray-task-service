@@ -44,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .name(projectCreateRequest.getProjectName())
                 .build();
 
-        projectRepository.save(projectEntity);
+        ProjectEntity saved = projectRepository.save(projectEntity);
 
         ProjectAccountEntity projectAccountEntity = ProjectAccountEntity.builder()
                 .projectEntity(projectEntity)
@@ -57,7 +57,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectAccountRepository.save(projectAccountEntity);
 
-        return projectEntity.getId();
+        return saved.getId();
     }
 
     @Override

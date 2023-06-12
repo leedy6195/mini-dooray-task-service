@@ -53,5 +53,4 @@ public class ResultResponse<T> {
                 .result(result)
                 .build();
     }
-
 }
