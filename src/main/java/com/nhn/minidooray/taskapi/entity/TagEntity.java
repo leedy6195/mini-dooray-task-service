@@ -33,7 +33,8 @@ public class TagEntity implements Updatable<TagUpdateRequest> {
     public void setCreateAt() { this.createAt = LocalDateTime.now(); }
 
     @Builder
-    public TagEntity(ProjectEntity projectEntity, String name) {
+    public TagEntity(Long id, ProjectEntity projectEntity, String name) {
+        this.id = id;
         this.projectEntity = projectEntity;
         this.name = name;
     }
