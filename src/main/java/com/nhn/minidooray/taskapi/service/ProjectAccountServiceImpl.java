@@ -69,7 +69,6 @@ public class ProjectAccountServiceImpl implements ProjectAccountService {
                 .orElseThrow(() -> new NotFoundException("authority"));
 
         projectAccountEntity.setAuthorityEntity(authorityEntity);
-        projectAccountRepository.save(projectAccountEntity);
     }
 
     @Override

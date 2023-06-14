@@ -42,7 +42,8 @@ public class CommentEntity implements Updatable<CommentUpdateRequest> {
     }
 
     @Builder
-    public CommentEntity(CommentEntity parentComment, TaskEntity taskEntity, String writerId, String content) {
+    public CommentEntity(Long id, CommentEntity parentComment, TaskEntity taskEntity, String writerId, String content) {
+        this.id = id;
         this.parentComment = parentComment;
         this.taskEntity = taskEntity;
         this.writerId = writerId;

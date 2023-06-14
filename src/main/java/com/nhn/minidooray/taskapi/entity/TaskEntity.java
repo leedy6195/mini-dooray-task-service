@@ -43,7 +43,8 @@ public class TaskEntity {
     }
 
     @Builder
-    public TaskEntity(String title, ProjectEntity projectEntity, String writerId, MilestoneEntity milestoneEntity) {
+    public TaskEntity(Long id, String title, ProjectEntity projectEntity, String writerId, MilestoneEntity milestoneEntity) {
+        this.id = id;
         this.title = title;
         this.projectEntity = projectEntity;
         this.writerId = writerId;

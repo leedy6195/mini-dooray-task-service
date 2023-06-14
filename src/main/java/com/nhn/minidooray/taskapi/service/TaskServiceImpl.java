@@ -67,9 +67,8 @@ public class TaskServiceImpl implements TaskService {
                         .accountId(taskUpdateRequest.getWriterId()).build())
                 .orElseThrow(() -> new NotFoundException("projectAccount"));
 
-
         taskEntity.update(taskUpdateRequest.getName(), projectEntity, taskUpdateRequest.getWriterId(), milestoneEntity);
-        return taskRepository.save(taskEntity).getId();
+        return taskId;
     }
 
     @Override

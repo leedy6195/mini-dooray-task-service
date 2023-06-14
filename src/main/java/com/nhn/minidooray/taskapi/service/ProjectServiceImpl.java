@@ -72,8 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectEntity.setName(projectUpdateRequest.getProjectName());
         projectEntity.setProjectStateEntity(projectStateEntity);
-
-        return projectRepository.save(projectEntity).getId();
+        return projectId;
     }
 
     @Override

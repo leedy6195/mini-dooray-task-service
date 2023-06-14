@@ -12,13 +12,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
 
+    @Transactional
     @Override
     public Long createComment(Long taskId, CommentCreateRequest commentCreateRequest) {
         CommentEntity parent = null;
@@ -38,14 +41,16 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(commentEntity).getId();
     }
 
+    @Transactional
     @Override
     public Long updateComment(Long commentId, CommentUpdateRequest commentUpdateRequest) {
         CommentEntity commentEntity = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("comment"));
         commentEntity.update(commentUpdateRequest);
-        return commentRepository.save(commentEntity).getId();
+        return commentId;
     }
 
+    @Transactional
     @Override
     public void deleteComment(Long commentId) {
         CommentEntity commentEntity = commentRepository.findById(commentId)
@@ -58,6 +63,4 @@ public class CommentServiceImpl implements CommentService {
         taskRepository.findById(taskId).orElseThrow(() -> new NotFoundException("task"));
         return commentRepository.findCommentsByTaskId(taskId, pageable);
     }
-
-
 }

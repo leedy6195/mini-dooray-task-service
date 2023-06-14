@@ -43,7 +43,7 @@ public class MilestoneServiceImpl implements MilestoneService {
                 .orElseThrow(() -> new NotFoundException("milestone"));
 
         milestoneEntity.update(milestoneUpdateRequest);
-        return milestoneEntity.getId();
+        return milestoneId;
     }
 
     @Override
