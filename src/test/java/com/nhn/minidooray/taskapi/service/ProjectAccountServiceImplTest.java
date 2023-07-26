@@ -242,6 +242,7 @@ class ProjectAccountServiceImplTest {
     @Test
     @DisplayName("프로젝트 멤버 업데이트 실패(변경하려는 권한이 존재하지 않음)")
     void updateProjectAccount_x_authorityNotExist() {
+
         when(projectAccountRepository.findById(Mockito.any())).thenReturn(Optional.of(ProjectAccountEntity.builder()
                 .pk(ProjectAccountEntity.Pk.builder()
                         .projectId(1L)
