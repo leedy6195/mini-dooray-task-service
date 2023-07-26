@@ -1,903 +1,1036 @@
-# ISSUE
-* TASK TABLE에 NAME 컬럼 없음
-* 조회는 아예 안씀
-* 설명 추가 필요
+# Specifications
 
-# 프로젝트
-주의사항
-* 회원 ID를 가져오는 곳은 전부 해당 ID 가 없으면 진행 불가하도록 체크 필요
-
-프로젝트 생성
-* PROJECT_ACCOUNT에 해당 권한 (관리자, 멤버 등) 넣어주기
-
-프로젝트 멤버 추가
-
-프로젝트 상태 변경
-
-TASK CRUD
-* MILE STONE 만 변경 가능하도록 하는 기능 필요
-
-COMMENT CRUD
-
-TAG CRUD
-* TASK TAG 포함
-
-MILE STONE CRUD
-
-# 메시지
+---
+## 요청
+### 메시지
 * json 포맷을 사용합니다.
-
-## 요청 메시지
 * json body를 포함하여 보내야 하는 메시지의 경우, Content-Type 헤더를 명시해야 합니다.
-* 모든 요청에 Host를 명시합니다.
-* ~~모든 요청에 Authorization 헤더를 포함해 요청합니다.~~
+---
 
-> Content-Type : application/json
-
-> Host : localhost:3306
-
-## 응답 메시지
-
-# API Spec
-
-## PROJECT-API > Project
-### 프로젝트 생성
-* 설명 추가
-#### POST /project-api/projects
-
-##### Request
-* Parameters
-
-* Body
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|사용자 아이디|accountId|String|필수|sampleId|작성자|
-|프로젝트 이름|projectName|45(2)|필수|샘플프로젝트||
-
-```json
-{
-    "accountId": "accountId",
-    "projectName": "projectName"
-}
-```
-
-##### 요청 에제
-
-```http
-POST /project-api/projects
-```
-
-##### Response
-
-* Body
-
+## 응답
 ```json
 {
 	"header": {
-		"resultCode": 201,
-		"resultMessage": "created successfully",
+		"resultCode": "{resultCode}",
+		"resultMessage": "{resultMessage}",
 		"successful": true
 	},
 	"result": [
-		{
-			"id": 1
-		}
+		...
+		 payload 	
+		...
 	],
 	"totalCount": 1
 }
-
 ```
-##### HTTP 응답 코드
-* 201 CREATED
-* 404 NOT FOUND
-	* NotFoundException
+### 응답 코드 종류
+* `200` OK (조회, 수정 성공)
+* `201` CREATED (생성 성공)
+* `204` NO CONTENT (삭제 성공)
+* `404` NOT FOUND (NotFoundException)
+* `409` CONFLICT (AlreadyExistsException)
+* `422` UNPROCESSABLE (ValidationFailedException)
 
-### 프로젝트 수정
-* 이름
-* 상태
-	* 활성(01)
-	* 휴면(02)
-	* 종료(03)
-#### PUT /project-api/projects/{projectId}
-##### Request
+---
+
+## `project-api` > `projects`
+### 프로젝트 생성
+```http request
+POST /project-api/projects
+```
+ 
+#### Request
+* PathVariables
+	* 없음
 * Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-
+  * 없음
 * Body
 
-|항목명|항목명(영문)| 항목크기(최소값) |항목구분|샘플데이터|비고|
-|---|----|-----------|--|---|--|
-|프로젝트 이름|projectName| 45(2)     |옵션|샘플프로젝트||
-|프로젝트 상태 코드|projectStateCode| 2(2)      |옵션|01||
-
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+  |-------------|------|------|--------|-------|
+  | accountId   | `String` | `true` | 4 - 45 | 작성자   |
+  | projectName | `String` | `true` | 4 - 45 | 프로젝트명 |
+* Example
 ```json
 {
-	"projectName": "projectName",
-	"projectStateCode": "01"
+	"accountId": "sampleAccount",
+	"projectName": "sampleProject"
 }
 ```
 
-##### 요청 예제
+#### Response
+* Payload
 
-```http
+  | 항목명        | 타입  | 필수여부 | 길이범위 | 비고    |
+  |-------------|------|------|------|-------|
+  | id   | `Long` | `true` | -    | 프로젝트 식별자   |
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 201,
+            "resultMessage": "created successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    ```
+
+---
+
+### 프로젝트 수정
+```http request
 PUT /project-api/projects/{projectId}
 ```
 
-##### Response
+#### Request
+
+* PathVariables
+
+  | 항목명        | 타입  | 필수여부 | 길이범위 | 비고    |
+	|-------------|------|------|------|-------|
+  | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+
+* Parameters
+  * 없음
+  
 
 * Body
 
-```json
-{
-	"header": {
-		"resultCode": 200,
-		"resultMessage": "updated successfully",
-		"successful": true
-	},
-	"result": [
-		{
-			"id": 1
-		}
-	],
-	"totalCount": 1
-}
+  | 항목명              | 타입  | 필수여부 | 길이범위   | 비고                     |
+  |------------------|------|------|--------|------------------------|
+	  | projectName      | `String` | `true` | 4 - 45 | 프로젝트명                  |
+  | projectStateCode | `String` | `true` | 2      | 01(활성), 02(휴면), 03(종료) |
 
-```
-##### HTTP 응답 코드
-* 200 OK
-* 404 NOT FOUND
-	* NotFoundException
+
+#### Response
+* Payload
+    
+  | 항목명        | 타입  | 필수여부 | 길이범위 | 비고    |
+  |-------------|------|------|------|-------|
+  | id   | `Long` | `true` | -    | 프로젝트 식별자   |
+* Example
+
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "updated successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    
+    ```
+
+---
 
 ### 프로젝트 삭제
-* 설명 추가
-#### DELETE /project-api/projects/{projectId}
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-
-##### 요청 에제
-
-```http
+```http request
 DELETE /project-api/projects/{projectId}
 ```
 
-##### Response
+#### Request
+* PathVariables
 
+  | 항목명        | 타입  | 필수여부 | 길이범위 | 비고    |
+	|-------------|------|------|------|-------|
+  | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+* Parameters
+  * 없음
 * Body
+  * 없음
 
-```json
-{
-	"header": {
-		"resultCode": 204,
-		"resultMessage": "deleted successfully",
-		"successful": true
-	},
-	"result": null,
-	"totalCount": 0
-}
+##### Response
+* Payload
+  * 없음
+* Example
+
+    ```json
+    {
+        "header": {
+            "resultCode": 204,
+            "resultMessage": "deleted successfully",
+            "successful": true
+        },
+        "result": null,
+        "totalCount": 0
+    }
+    ```
+
+---
+
+### 유저가 속한 프로젝트 전체 조회
+```http request
+GET /project-api/{accountId}/projects
 ```
-##### HTTP 응답 코드
-* 204 NO CONTENT
-* 404 NOT FOUND
-	* NotFoundException
+
+#### Request
+* PathVariables
+
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+  |-------------|------|------|--------|-------|
+  | accountId   | `String` | `true` | 4 - 45 | 유저 식별자   |
+
+* Parameters
+
+  | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
+    |------|-------|---------|------|---------|
+  | page | `int` | `false` | -    | 조회할 페이지 |
+   | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+   | sort | `String` | `false` | -    | 정렬 조건 |
+* Body
+    * 없음
+
+#### Response
+
+* Payload
+
+ | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | accountId            | `String` | `true` | 4 - 45 | 작성자                     |
+    | projectId            | `Long` | `true` |  | 프로젝트 식별자                |
+    | projectName          | `String` | `true` | 4 - 45 | 프로젝트명                   |
+    | projectStateCode     | `String` | `true` | 2 | 01(활성), 02(휴면), 03(종료)  |
+     | accountAuthorityCode | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님) |
+
+
+* Example
+    ```json
+    {
+      "header": {
+        "resultCode": 200,
+        "resultMessage": "fetched successfully",
+        "successful": true
+      },
+      "result": [
+        {
+          "accountId": "sampleAccount",
+          "projectId": 1,
+          "projectName": "sampleProject",
+          "projectStateCode": "01",
+          "accountAuthorityCode": "01"
+        },
+        {
+          "accountId": "sampleAccount",
+          "projectId": 2,
+          "projectName": "sampleProject2",
+          "projectStateCode": "01",
+          "accountAuthorityCode": "02"
+        }
+      ],
+        "totalCount": 2
+    }
+    ```
+
+---
 
 ### 프로젝트 조회
-* 설명 추가
-
-#### GET /project-api/projects/{projectId}
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-
-##### 요청 에제
-
-```http
+```http request
+GET /project-api/projects/{projectId}
 ```
+
+#### Request
+* PathVariables
+
+   | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+   |-------------|------|------|--------|-------|
+   | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+* Parameters
+    * 없음
+* Body
+    * 없음
+
+
 
 ##### Response
+* Payload
 
-* Body
+   | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | projectId            | `Long` | `true` |  | 프로젝트 식별자                |
+    | projectName          | `String` | `true` | 4 - 45 | 프로젝트명                   |
+    | projectStateCode     | `String` | `true` | 2 | 01(활성), 02(휴면), 03(종료)  |
+     
+* Example
 
-```json
-{
-}
-```
-##### HTTP 응답 코드
-* 
+    ```json
+    {
+      "header": {
+        "resultCode": 200,
+        "resultMessage": "fetched successfully",
+        "successful": true
+      },
+      "result": [
+        {
+          "projectId": 1,
+          "projectName": "sampleProject",
+          "projectStateCode": "01"
+        }
+      ],
+      "totalCount": 1
+    }
+    
+    ```
 
-#### GET /project-api/projects
-##### Request
-* Parameters
+---
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|페이지|page||옵션|0|페이지 번호, 목록 조회시 필수|
-|한 페이지 결과수|numOfRows||옵션|10|한 페이지 결과 수, 목록조회시 필수|
-
-##### 요청 에제
-
-```http
-```
-
-##### Response
-
-* Body
-
-```json
-{
-}
-
-```
-##### HTTP 응답 코드
-* 
-
-## PROJECT-API > ProjectAccount
-* 관리자
-* 멤버
+## `project-api` > `projectAccount`
 ### 프로젝트 사용자 추가
-#### POST /project-api/projects/{projectId}/accounts
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-
-* Body
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|사용자 아이디|accountId|40(5)|필수|sampleId|권한을 부여받는 사용자|
-|권한 코드|authorityCode|4(4)|필수|authorityCode|권한|
-
-```json
-{
-    "accountId":"accountId",
-    "authorityCode":"authorityCode"    
-}
-```
-
-##### 요청 에제
-
-```http
+```http request
 POST /project-api/projects/{projectId}/accounts
 ```
 
-##### Response
+#### Request
+* PathVariables
+
+   | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+   |-------------|------|------|--------|-------|
+   | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+* Parameters
+    * 없음
 
 * Body
 
-```json
-{
-	"header": {
-		"resultCode": 201,
-		"resultMessage": "created successfully",
-		"successful": true
-	},
-	"result": null,
-	"totalCount": 0
-}
+    | 항목명 | 타입 | 필수여부 | 길이범위 | 비고                           |
+    |---|----|---|--|------------------------------|
+    | accountId | `String` | `true` | 4 - 45 | 권한을 부여받는 사용자                 |
+     | authorityCode | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님) |
 
-```
-##### HTTP 응답 코드
-* 201 CREATED
-* 404 NOT FOUND
-	* NotFoundException
+
+#### Response
+* Payload
+  * 없음
+* Example
+    
+    ```json
+    {
+        "header": {
+            "resultCode": 201,
+            "resultMessage": "created successfully",
+            "successful": true
+        },
+        "result": null,
+        "totalCount": 0
+    }
+    
+    ```
+
+---
 
 ### 프로젝트 사용자 수정
-#### PUT /project-api/projects/{projectId}/accounts/{accountId}
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-|사용자 아이디|accountId|40(5)|필수|sampleId||
-
-* Body
-
-|항목명|항목명(영문)| 항목크기(최소값) |항목구분| 샘플데이터 |비고|
-|---|----|-----------|--|-------|--|
-|권한 코드|authorityCode| 2(2)      |필수| 01    |수정될 권한|
-
-```json
-{
-    "authorityCode": "01"    
-}
-```
-
-##### 요청 에제
-
-```http
+```http request
 PUT /project-api/projects/{projectId}/accounts/{accountId}
 ```
 
-##### Response
+#### Request
+* PathVariables
+
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+     |-------------|------|------|--------|-------|
+  | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+   | accountId   | `String` | `true` | 4 - 45    | 사용자 식별자   |
+* Parameters
+    * 없음
 
 * Body
+  
+    | 항목명 | 타입 | 필수여부 | 길이범위 | 비고                              |
+    |---|----|---|--|---------------------------------|
+    | authorityCode | `String` | `true` | 2 | 수정될 권한, 01(관리자), 02(멤버), 03(손님) |
 
-```json
-{
-	"header": {
-		"resultCode": 200,
-		"resultMessage": "updated successfully",
-		"successful": true
-	},
-	"result": null,
-	"totalCount": 0
-}
 
-```
-##### HTTP 응답 코드
-* 200 OK
-* 404 NOT FOUND
-	* NotFoundException
+#### Response
+
+* Payload
+  * 없음
+
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "updated successfully",
+            "successful": true
+        },
+        "result": null,
+        "totalCount": 0
+    }
+    
+    ```
+
+---
 
 ### 프로젝트 사용자 삭제
-#### DELETE /project-api/projects/{projectId}/accounts/{accountId}
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-|사용자 아이디|accountId|40(5)|필수|sampleId||
-
-##### 요청 에제
-
 ```http
 DELETE /project-api/projects/{projectId}/accounts/{accountId}
 ```
+#### Request
+* PathVariables
 
-##### Response
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+     |-------------|------|------|--------|-------|
+  | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+   | accountId   | `String` | `true` | 4 - 45    | 사용자 식별자   |
+
+* Parameters
+    * 없음
 
 * Body
+    * 없음
 
-```json
-{
-	"header": {
-		"resultCode": 204,
-		"resultMessage": "deleted successfully",
-		"successful": true
-	},
-	"result": null,
-	"totalCount": 0
-}
-```
-##### HTTP 응답 코드
-* 208 NO CONTENT
-* 404 NOT FOUND
-	* NotFoundException
+#### Response
+
+* Payload
+  * 없음
+
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 204,
+            "resultMessage": "deleted successfully",
+            "successful": true
+        },
+        "result": null,
+        "totalCount": 0
+    }
+    ```
+
+---
 
 ### 프로젝트 사용자 권한 조회
-#### GET /project-api/projects/{projectId}/accounts/{accountId}
-##### Request
+```http
+GET /project-api/projects/{projectId}/accounts/{accountId}
+```
+#### Request
+* PathVariables
+
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+     |-------------|------|------|--------|-------|
+  | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+   | accountId   | `String` | `true` | 4 - 45    | 사용자 식별자   |
 * Parameters
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-
-##### 요청 에제
-
-```http
-```
-
-##### Response
+  | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
+      |------|-------|---------|------|---------|
+  | page | `int` | `false` | -    | 조회할 페이지 |
+  | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+  | sort | `String` | `false` | -    | 정렬 조건 |
 
 * Body
+    * 없음
 
-```json
-{
-}
+#### Response
+* Payload
 
+   | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | authorityCode     | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님)  |
+
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "fetched successfully",
+            "successful": true
+        },
+        "result": {
+            "authorityCode": "01"
+        },
+        "totalCount": 0
+    }
+    ```
+---
+
+### 프로젝트 사용자 목록 조회
+```http
+GET /project-api/projects/{projectId}/accounts
 ```
-##### HTTP 응답 코드
-* 
+ 
+#### Request
+* PathVariables
 
-#### GET /project-api/projects/{projectId}/accounts
-##### Request
+   | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+      |-------------|------|------|--------|-------|
+      | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
 * Parameters
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|페이지|page||옵션|0|페이지 번호, 목록 조회시 필수|
-|한 페이지 결과수|numOfRows||옵션|10|한 페이지 결과 수, 목록조회시 필수|
-
-##### 요청 에제
-
-```http
-```
-
-##### Response
-
+  | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
+      |------|-------|---------|------|---------|
+  | page | `int` | `false` | -    | 조회할 페이지 |
+  | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+  | sort | `String` | `false` | -    | 정렬 조건 |
 * Body
+    * 없음
 
-```json
-{
-}
+#### Response
+* Payload
 
-```
-##### HTTP 응답 코드
-* 
+   | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | projectId     | `Long` | `true` | - | 프로젝트 식별자  |
+     | projectName   | `String` | `true` | 4 - 45 | 프로젝트 이름  |
+     | accountId   | `String` | `true` | 4 - 45 | 사용자 식별자  |
+     | authorityCode   | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님)  |
+     | authority  | `String` | `true` | 4 - 45 | 권한  |
 
-## PROJECT-API > MileStone
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "fetched successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "projectId": 1,
+                "projectName": "sampleProject",
+                "accountId": "sampleAccount",
+                "authorityCode": "01",
+                "authority": "관리자"
+            },
+            {
+                "projectId": 1,
+                "projectName": "sampleProject",
+                "accountId": "sampleAccount",
+                "authorityCode": "02",
+                "authority": "멤버"
+            },
+            {
+                "projectId": 1,
+                "projectName": "sampleProject",
+                "accountId": "sampleAccount",
+                "authorityCode": "03",
+                "authority": "손님"
+            }
+        ],
+        "totalCount": 3
+    }
+    ```
+---
+
+## `project-api` > `milestones`
 ### 마일스톤 추가
-#### CREATE /project-api/projects/{projectId}/milestones
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-
-* Body
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|마일스톤 이름|name|45(2)|필수|sampleMileStone|추가할 마일스톤 이름|
-|시작일|startDate|LocalDate|필수|2023-06-10||
-|종료일|endDate|LocalDate|필수|2023-06-13||
-
-```json
-{
-    "name": "name",
-    "startDate": "2023-06-10",
-    "endDate": "2023-06-13"
-}
-```
-
-##### 요청 에제
-
 ```http
 CREATE /project-api/projects/{projectId}/milestones
 ```
+#### Request
+* PathVariables
 
-##### Response
-
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+     |-------------|------|------|--------|-------|
+  | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+* Parameters
+    * 없음
 * Body
 
-```json
-{
-	"header": {
-		"resultCode": 201,
-		"resultMessage": "created successfully",
-		"successful": true
-	},
-	"result": [
-		{
-			"id": 1
-		}
-	],
-	"totalCount": 1
-}
+   | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | name     | `String` | `true` | 4 - 45 | 마일스톤 이름  |
+     | startDate   | `String` | `true` | 10 | 시작일  |
+     | endDate   | `String` | `true` | 10 | 종료일  |
 
-```
-##### HTTP 응답 코드
-* 201 CREATED
-* 404 NOT FOUND
-	* NotFoundException
+
+#### Response
+
+* Payload
+   
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | id     | `Long` | `true` | - | 마일스톤 식별자  |
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 201,
+            "resultMessage": "created successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    
+    ```
+
+---
 
 ### 마일스톤 수정
-#### PUT /project-api/projects/{projectId}/milestones/{milestoneId}
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-|마일스톤 아이디|milestoneId|45(2)|필수|sampleMileStone|추가할 마일스톤|
-
-* Body
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|마일스톤 이름|name|45(2)|필수|sampleMileStone|수정된 마일스톤 이름|
-|시작일|startDate|LocalDate|필수|2023-06-10||
-|종료일|endDate|LocalDate|필수|2023-06-13||
-
-```json
-{
-    "name":"name",
-    "startDate":"2023-06-10",
-    "endDate":"2023-06-13"
-}
-```
-
-##### 요청 에제
-
 ```http
 PUT /project-api/projects/{projectId}/milestones/{milestoneId}
 ```
-
-##### Response
-
+#### Request
+* PathVariables
+    
+     | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+      |-------------|------|------|--------|-------|
+      | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+      | milestoneId   | `Long` | `true` | -    | 마일스톤 식별자   |
+* Parameters
+    * 없음
 * Body
 
-```json
-{
-	"header": {
-		"resultCode": 200,
-		"resultMessage": "updated successfully",
-		"successful": true
-	},
-	"result": [
-		{
-			"id": 1
-		}
-	],
-	"totalCount": 1
-}
+   | 항목명                  | 타입       | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|----------|------|--------|-------------------------|
+    | name     | `String` | `true` | 4 - 45 | 마일스톤 이름  |
+     | startDate   | `Date`   | `true` | -      | 시작일  |
+     | endDate   | `Date` | `true` | -      | 종료일  |
 
-```
+#### Response
 
-##### HTTP 응답 코드
-* 200 OK
-* 404 NOT FOUND
-    * NotFoundException
+* Payload
+   
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | id     | `Long` | `true` | - | 마일스톤 식별자  |
+
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "updated successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    
+    ```
+
+---
 
 ### 마일스톤 삭제
-#### DELETE /project-api/projects/{projectId}/milestones/{milestoneId}
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1||
-|마일스톤 아이디|milestoneId|Long|필수|1|마일스톤|
-
-##### 요청 에제
-
 ```http
 DELETE /project-api/projects/{projectId}/milestones/{milestoneId}
 ```
 
-##### Response
-
+#### Request
+* PathVariables
+    
+     | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+      |-------------|------|------|--------|-------|
+      | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+      | milestoneId   | `Long` | `true` | -    | 마일스톤 식별자   |
+* Parameters
+    * 없음
 * Body
+    * 없음
+#### Response
 
-```json
-{
-	"header": {
-		"resultCode": 204,
-		"resultMessage": "deleted successfully",
-		"successful": true
-	},
-	"result": null,
-	"totalCount": 0
-}
+* Payload
+    * 없음
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 204,
+            "resultMessage": "deleted successfully",
+            "successful": true
+        },
+        "result": null,
+        "totalCount": 0
+    }
+    ```
+  
+---
+
+### 프로젝트의 마일스톤 조회
+```http
+GET /project-api/projects/{projectId}/milestones
 ```
 
-##### HTTP 응답 코드
-* 208 NO CONTENT
-* 404 NOT FOUND
-    * NotFoundException
-
-### 마일스톤 조회
-#### GET /project-api/projects/{projectId}/milestones/{milestoneId}
-##### Request
+#### Request
+* PathVariables
+    
+     | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+      |-------------|------|------|--------|-------|
+      | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
 * Parameters
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-
-##### 요청 에제
-
-```http
-```
-
-##### Response
-
+  | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
+  |------|-------|---------|------|---------|
+  | page | `int` | `false` | -    | 조회할 페이지 |
+  | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+  | sort | `String` | `false` | -    | 정렬 조건 |
 * Body
+    * 없음
 
-```json
-{
-}
+#### Response
+* Payload
+    
+    | 항목명           | 타입       | 필수여부 | 길이범위   | 비고                      |
+     |---------------|----------|------|--------|-------------------------|
+     | projectId     | `Long`   | `true` | -      | 프로젝트 식별자  |
+     | milestoneId   | `Long`   | `true` | -      | 마일스톤 식별자  |
+     | milestoneName | `String` | `true` | 4 - 45 | 마일스톤 이름  |
+      | startDate     | `Date`   | `true` | -      | 시작일  |
+      | endDate       | `Date`   | `true` | -      | 종료일  |
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "fetched successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "projectId": 1,
+                "milestoneId": 1,
+                "milestoneName": "마일스톤1",
+                "startDate": "2021-01-01",
+                "endDate": "2021-01-31"
+            },
+            {
+                "projectId": 1,
+                "milestoneId": 2,
+                "milestoneName": "마일스톤2",
+                "startDate": "2021-02-01",
+                "endDate": "2021-02-28"
+            }
+        ],
+        "totalCount": 2
+    }
+    ```
 
-```
-##### HTTP 응답 코드
-* 
+---
 
-#### GET /project-api/projects/{projectId}/milestones
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|페이지|page||옵션|0|페이지 번호, 목록 조회시 필수|
-|한 페이지 결과수|numOfRows||옵션|10|한 페이지 결과 수, 목록조회시 필수|
-
-##### 요청 에제
-
-```http
-```
-
-##### Response
-
-* Body
-
-```json
-{
-}
-
-```
-##### HTTP 응답 코드
-* 
-
-## PROJECT-API > Tag
+## `project-api` > `tags`
 
 ### 태그 추가
-#### POST /project-api/projects/{projectId}/tags
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-
-* Body
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|태그 이름|name|45(2)|필수|sampleTagName||
-```json
-{
-    "name" : "name"
-}
-```
-##### 요청 에제
-
 ```http
 POST /project-api/projects/{projectId}/tags
 ```
+#### Request
+* PathVariables
 
-##### Response
-
-* Body
-
-```json
-{
-	"header": {
-		"resultCode": 201,
-		"resultMessage": "created successfully",
-		"successful": true
-	},
-	"result": [
-		{
-			"id": 1
-		}
-	],
-	"totalCount": 1
-}
-```
-##### HTTP 응답 코드
-* 201 CREATED
-* 404 NOT FOUND
-	* NotFoundException
-### 태그 수정
-#### PUT /project-api/projects/{projectId}/tags/{tagId}
-##### Request
+    | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+    |-------------|------|------|--------|-------|
+    | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
 * Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-|태그 아이디|tagId|Long|필수|1|AI|
-
+    * 없음
 * Body
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|태그 이름|name|45(2)|필수|sampleTagName||
-```json
-{
-    "name" : "name"
-}
+   | 항목명                  | 타입       | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|----------|------|--------|-------------------------|
+    | name     | `String` | `true` | 4 - 45 | 태그 이름  |
 
-```
+#### Response
 
-#### 요청 에제
+* Payload
+    
+    | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+     |----------------------|------|------|--------|-------------------------|
+     | id     | `Long` | `true` | - | 태그 식별자  |
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 201,
+            "resultMessage": "created successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    ```
+---
 
+### 태그 수정
 ```http
 PUT /project-api/projects/{projectId}/tags/{tagId}
 ```
 
-##### Response
-
+#### Request
+* PathVariables
+    
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+    |-------------|------|------|--------|-------|
+    | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+    | tagId   | `Long` | `true` | -    | 태그 식별자   |
+* Parameters
+    * 없음
 * Body
 
-```json
-{
-	"header": {
-		"resultCode": 200,
-		"resultMessage": "updated successfully",
-		"successful": true
-	},
-	"result": [
-		{
-			"id": 1
-		}
-	],
-	"totalCount": 1
-}
+   | 항목명                  | 타입       | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|----------|------|--------|-------------------------|
+    | name     | `String` | `true` | 4 - 45 | 태그 이름  |
 
-```
-##### HTTP 응답 코드
-* 200 OK
-* 404 NOT FOUND
-	* NotFoundException
+
+##### Response
+
+* Payload
+        
+    | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | id     | `Long` | `true` | - | 태그 식별자  |
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "updated successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    
+    ```
+  
+---
 
 ### 태그 삭제
-#### DELETE /project-api/projects/{projectId}/tags/{tagId}
-##### Request
+```http
+DELETE /project-api/projects/{projectId}/tags/{tagId}
+```
+
+#### Request
+* PathVariables
+    
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+    |-------------|------|------|--------|-------|
+    | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+    | tagId   | `Long` | `true` | -    | 태그 식별자   |
+* Parameters
+    * 없음
+* Body
+    * 없음
+
+#### Response
+
+* Payload
+    * 없음
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 204,
+            "resultMessage": "deleted successfully",
+            "successful": true
+        },
+        "result": null,
+        "totalCount": 0
+    }
+    ```
+---
+
+### 프로젝트의 전체 태그 조회
+```http
+GET /project-api/projects/{projectId}/tags
+```
+
+#### Request
+* PathVariables
+    
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+    |-------------|------|------|--------|-------|
+    | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
 * Parameters
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-|태그 아이디|tagId|Long|필수|1|AI|
-
-##### 요청 에제
-
-```http
-    DELETE /project-api/projects/{projectId}/tags/{tagId}
-```
-
-##### Response
+  | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
+  |------|-------|---------|------|---------|
+  | page | `int` | `false` | -    | 조회할 페이지 |
+  | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+  | sort | `String` | `false` | -    | 정렬 조건 |
 
 * Body
+    * 없음
 
-```json
-{
-	"header": {
-		"resultCode": 204,
-		"resultMessage": "deleted successfully",
-		"successful": true
-	},
-	"result": null,
-	"totalCount": 0
-}
+
+#### Response
+
+* Payload
+
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | projectId    | `Long` | `true` | - | 프로젝트 식별자  |
+    | tagId     | `Long` | `true` | - | 태그 식별자  |
+    | tagName     | `String` | `true` | - | 태그 이름  |
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "fetched successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "projectId": 1,
+                "tagId": 1,
+                "tagName": "태그1"
+            },
+            {
+                "projectId": 1,
+                "tagId": 2,
+                "tagName": "태그2"
+            }
+        ],
+        "totalCount": 2
+    }
+    ```
+
+---
+### 태스크의 태그 조회
+```http
+GET /project-api/projects/{projectId}/tasks/{taskId}/tags
 ```
-##### HTTP 응답 코드
-* 204 NO CONTENT
-* 404 NOT FOUND
-	* NotFoundException
 
-### 태그 조회
-#### GET /project-api/projects/{projectId}/tags/{tagId}
-##### Request
+#### Request
+* PathVariables
+    
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+    |-------------|------|------|--------|-------|
+    | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+    | taskId   | `Long` | `true` | -    | 태스크 식별자   |
 * Parameters
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
+    | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
+        |------|-------|---------|------|---------|
+    | page | `int` | `false` | -    | 조회할 페이지 |
+    | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+    | sort | `String` | `false` | -    | 정렬 조건 |
 
-##### 요청 에제
 
-```http
-```
+#### Response
 
-##### Response
+* Payload
 
-* Body
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | projectId    | `Long` | `true` | - | 프로젝트 식별자  |
+    | taskId     | `Long` | `true` | - | 태스크 식별자  |
+    | tagId     | `Long` | `true` | - | 태그 식별자  |
+    | tagName     | `String` | `true` | - | 태그 이름  |
 
-```json
-{
-}
-
-```
-##### HTTP 응답 코드
-* 
-
-#### GET /project-api/projects/{projectId}/tags
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|페이지|page||옵션|0|페이지 번호, 목록 조회시 필수|
-|한 페이지 결과수|numOfRows||옵션|10|한 페이지 결과 수, 목록조회시 필수|
-
-##### 요청 에제
-
-```http
-```
-
-##### Response
-
-* Body
-
-```json
-{
-}
-
-```
-##### HTTP 응답 코드
-* 
+* Example
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "fetched successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "projectId": 1,
+                "taskId": 1,
+                "tagId": 1,
+                "tagName": "태그1"
+            },
+            {
+                "projectId": 1,
+                "taskId": 1,
+                "tagId": 2,
+                "tagName": "태그2"
+            }
+        ],
+        "totalCount": 2
+    }
+    ```
+---
 
 ## PROJECT-API > Task
 ### 업무 추가
-#### POST /project-api/projects/{projectId}/tasks
-##### Request
-* Parameters
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1|식별자|
-
-* Body
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|업무 이름|taskName|45(2)|필수|sampleTaskName||
-|프로젝트 아이디|projectId|Long|필수|1||
-|작성자 아이디|writerId|40(5)|필수|sampleId||
-|마일스톤 아이디|milestoneId|Long|필수|1|마일스톤|
-```json
-{
-    "taskName" : "taskName",
-    "projectId" : "projectId",
-    "writerId" : "writerId",
-    "milestoneId" : "milestoneId"
-
-}
-```
-
-##### 요청 에제
-
 ```http
 POST /project-api/projects/{projectId}/tasks
 ```
 
-##### Response
-
+#### Request
+* PathVariables
+    
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+    |-------------|------|------|--------|-------|
+    | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+* Parameters
+    * 없음
 * Body
 
-```json
-{
-	"header": {
-		"resultCode": 201,
-		"resultMessage": "created successfully",
-		"successful": true
-	},
-	"result": [
-		{
-			"id": 1
-		}
-	],
-	"totalCount": 1
-}
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | taskName    | `String` | `true` | - | 업무 이름  |
+    | projectId     | `Long` | `true` | - | 프로젝트 식별자  |
+    | writerId     | `Long` | `true` | - | 작성자 식별자  |
+    | milestoneId     | `Long` | `false` | - | 마일스톤 식별자  |
 
-```
-##### HTTP 응답 코드
-* 201 CREATED
-* 404 NOT FOUND
-	* NotFoundException
+#### Response
+* Payload
+
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | id    | `Long` | `true` | - | 업무 식별자  |
+* Example
+
+    ```json
+    {
+        "header": {
+            "resultCode": 201,
+            "resultMessage": "created successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    
+    ```
+---
 
 ### 업무 수정
-#### PUT /project-api/projects/{projectId}/tasks/{taskId}
-##### Request
+```http
+PUT /project-api/projects/{projectId}/tasks/{taskId}
+```
+#### Request
+* PathVariables
+     
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+     |-------------|------|------|--------|-------|
+     | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+     | taskId   | `Long` | `true` | -    | 업무 식별자   |
 * Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1||
-|업무 아이디|taskId|Long|필수|1||
+    * 없음
 
 * Body
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|업무 이름|taskName|45(2)|필수|sampleTaskName||
-|프로젝트 아이디|projectId|Long|필수|1||
-|작성자 아이디|writerId|40(5)|필수|sampleId||
-|마일스톤 아이디|milestoneId|Long|필수|1|마일스톤|
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | taskName    | `String` | `true` | - | 업무 이름  |
+    | projectId     | `Long` | `true` | - | 프로젝트 식별자  |
+    | writerId     | `Long` | `true` | - | 작성자 식별자  |
+    | milestoneId     | `Long` | `false` | - | 마일스톤 식별자  |
 
 ```json
 {
@@ -908,132 +1041,120 @@ POST /project-api/projects/{projectId}/tasks
 }
 ```
 
-##### 요청 에제
+#### Response
+* Payload
 
-```http
-PUT /project-api/projects/{projectId}/tasks/{taskId}
-```
+   | 항목명                 | 타입  | 필수여부 | 길이범위   | 비고                      |
+    |----------------------|------|------|--------|-------------------------|
+    | id    | `Long` | `true` | - | 업무 식별자  |
+* Example
 
-##### Response
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "updated successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "id": 1
+            }
+        ],
+        "totalCount": 1
+    }
+    
+    ```
 
-* Body
-
-```json
-{
-	"header": {
-		"resultCode": 200,
-		"resultMessage": "updated successfully",
-		"successful": true
-	},
-	"result": [
-		{
-			"id": 1
-		}
-	],
-	"totalCount": 1
-}
-
-```
-##### HTTP 응답 코드
-* 200 OK
-* 404 NOT FOUND
-	* NotFoundException
+---
 
 ### 업무 삭제
-#### DELETE /project-api/projects/{projectId}/tasks/{taskId}
-##### Request
-* Parameters
-
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|프로젝트 아이디|projecId|Long|필수|1||
-|업무 아이디|taskId|Long|필수|1||
-
-##### 요청 에제
-
 ```http
 DELETE /project-api/projects/{projectId}/tasks/{taskId}
 ```
 
-##### Response
-
+#### Request
+* PathVariables
+     
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+     |-------------|------|------|--------|-------|
+     | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+     | taskId   | `Long` | `true` | -    | 업무 식별자   |
+* Parameters
+    * 없음
 * Body
+    * 없음
 
-```json
-{
-	"header": {
-		"resultCode": 204,
-		"resultMessage": "deleted successfully",
-		"successful": true
-	},
-	"result": null,
-	"totalCount": 0
-}
-```
-##### HTTP 응답 코드
-* 204 NO CONTENT
-* 404 NOT FOUND
-	* NotFoundException
+#### Response
+* Payload
+    * 없음
+* Example
+
+    ```json
+    {
+        "header": {
+            "resultCode": 204,
+            "resultMessage": "deleted successfully",
+            "successful": true
+        },
+        "result": null,
+        "totalCount": 0
+    }
+    ```
+---
 
 ### 업무 조회
-#### GET /project-api/projects/{projectId}/tasks/{taskId}
-##### Request
+```http
+GET /project-api/projects/{projectId}/tasks/{taskId}
+```
+
+#### Request
+* PathVariables
+     
+  | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
+     |-------------|------|------|--------|-------|
+     | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+     | taskId   | `Long` | `true` | -    | 업무 식별자   |
 * Parameters
 
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
+    | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
+  |------|-------|---------|------|---------|
+  | page | `int` | `false` | -    | 조회할 페이지 |
+  | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+  | sort | `String` | `false` | -    | 정렬 조건 |
 
-##### 요청 에제
+#### Response
 
-```http
-```
+* Payload
 
-##### Response
+   | 항목명         | 타입              | 필수여부 | 길이범위   | 비고       |
+    |-------------|-----------------|------|--------|----------|
+    | projectId   | `Long`          | `true` | -      | 프로젝트 식별자 |
+    | taskId      | `String`        | `true` | -      | 업무 식별자   |
+    | taskTitle   | `String`        | `true` | 4 - 45 | 업무 제목    |
+     | taskContent | `String`        | `true` | - 2047 | 업무 내용    |
+     | writerId    | `String`        | `true` | -      | 작성자 ID   |
+     | createdAt   | `LocalDateTime` | `true` | -      | 작성일      |
+* Example
 
-* Body
-
-```json
-{
-    [추가]
-}
-
-```
-##### HTTP 응답 코드
-* 
-
-#### GET /project-api/projects/{projectId}/tasks
-##### Request
-|항목명|항목명(영문)|항목크기(최소값)|항목구분|샘플데이터|비고|
-|---|----|---|--|---|--|
-|페이지|page||옵션|0|페이지 번호, 목록 조회시 필수|
-|한 페이지 결과수|numOfRows||옵션|10|한 페이지 결과 수, 목록조회시 필수|
-
-##### 요청 에제
-
-```http
-GET /project-api/projects/{projectId}/tasks
-```
-
-##### Response
-
-* Body
-
-```json
-{
-    [추가]
-}
-```
-##### HTTP 응답 코드
-
-## PROJECT-API > Task_Tag
-### 업무에 태그 추가
-#### POST /project-api/projects/{projectId}/tasks
-### 업무에 태그 수정
-#### PUT /project-api/projects/{projectId}/tasks/{taskId}
-### 업무에 태그 삭제
-#### DELETE /project-api/projects/{projectId}/tasks/{taskId}
-### 업무에 태그 조회
-#### GET /project-api/projects/{projectId}/tasks/{taskId}
-#### GET /project-api/projects/{projectId}/tasks
-
-## PROJECT-API > Commnent
+    ```json
+    {
+        "header": {
+            "resultCode": 200,
+            "resultMessage": "fetched successfully",
+            "successful": true
+        },
+        "result": [
+            {
+                "projectId": 1,
+                "taskId": 1,
+                "taskTitle": "taskTitle",
+                "taskContent": "taskContent",
+                "writerId": "writerId",
+                "createdAt": "2021-08-09T15:00:00"
+            }
+        ],
+        "totalCount": 1
+    }
+    ```
+---
