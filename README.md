@@ -423,7 +423,7 @@ GET /project-api/projects/{projectId}/accounts/{accountId}
 * Parameters
 
   | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
-      |------|-------|---------|------|---------|
+  |------|-------|---------|------|---------|
   | page | `int` | `false` | -    | 조회할 페이지 |
   | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
   | sort | `String` | `false` | -    | 정렬 조건 |
