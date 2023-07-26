@@ -185,10 +185,10 @@ GET /project-api/{accountId}/projects
 * Parameters
 
   | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
-    |------|-------|---------|------|---------|
+  |------|-------|---------|------|---------|
   | page | `int` | `false` | -    | 조회할 페이지 |
-   | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
-   | sort | `String` | `false` | -    | 정렬 조건 |
+  | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
+  | sort | `String` | `false` | -    | 정렬 조건 |
 * Body
     * 없음
 
@@ -197,12 +197,12 @@ GET /project-api/{accountId}/projects
 * Payload
 
  | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
-    |----------------------|------|------|--------|-------------------------|
-    | accountId            | `String` | `true` | 4 - 45 | 작성자                     |
-    | projectId            | `Long` | `true` |  | 프로젝트 식별자                |
-    | projectName          | `String` | `true` | 4 - 45 | 프로젝트명                   |
-    | projectStateCode     | `String` | `true` | 2 | 01(활성), 02(휴면), 03(종료)  |
-     | accountAuthorityCode | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님) |
+ |----------------------|------|------|--------|-------------------------|
+ | accountId            | `String` | `true` | 4 - 45 | 작성자                     |
+ | projectId            | `Long` | `true` |  | 프로젝트 식별자                |
+ | projectName          | `String` | `true` | 4 - 45 | 프로젝트명                   |
+ | projectStateCode     | `String` | `true` | 2 | 01(활성), 02(휴면), 03(종료)  |
+ | accountAuthorityCode | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님) |
 
 
 * Example
