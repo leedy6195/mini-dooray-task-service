@@ -196,13 +196,13 @@ GET /project-api/{accountId}/projects
 
 * Payload
 
- | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
- |----------------------|------|------|--------|-------------------------|
- | accountId            | `String` | `true` | 4 - 45 | 작성자                     |
- | projectId            | `Long` | `true` |  | 프로젝트 식별자                |
- | projectName          | `String` | `true` | 4 - 45 | 프로젝트명                   |
- | projectStateCode     | `String` | `true` | 2 | 01(활성), 02(휴면), 03(종료)  |
- | accountAuthorityCode | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님) |
+  | 항목명                  | 타입  | 필수여부 | 길이범위   | 비고                      |
+  |----------------------|------|------|--------|-------------------------|
+  | accountId            | `String` | `true` | 4 - 45 | 작성자                     |
+  | projectId            | `Long` | `true` |  | 프로젝트 식별자                |
+  | projectName          | `String` | `true` | 4 - 45 | 프로젝트명                   |
+  | projectStateCode     | `String` | `true` | 2 | 01(활성), 02(휴면), 03(종료)  |
+  | accountAuthorityCode | `String` | `true` | 2 | 01(관리자), 02(멤버), 03(손님) |
 
 
 * Example
