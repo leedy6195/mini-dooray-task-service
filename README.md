@@ -579,18 +579,18 @@ PUT /project-api/projects/{projectId}/milestones/{milestoneId}
 * PathVariables
     
      | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
-      |-------------|------|------|--------|-------|
-      | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
-      | milestoneId   | `Long` | `true` | -    | 마일스톤 식별자   |
+     |-------------|------|------|--------|-------|
+     | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+     | milestoneId   | `Long` | `true` | -    | 마일스톤 식별자   |
 * Parameters
     * 없음
 * Body
 
-   | 항목명                  | 타입       | 필수여부 | 길이범위   | 비고                      |
+    | 항목명                  | 타입       | 필수여부 | 길이범위   | 비고                      |
     |----------------------|----------|------|--------|-------------------------|
     | name     | `String` | `true` | 4 - 45 | 마일스톤 이름  |
-     | startDate   | `Date`   | `true` | -      | 시작일  |
-     | endDate   | `Date` | `true` | -      | 종료일  |
+    | startDate   | `Date`   | `true` | -      | 시작일  |
+    | endDate   | `Date` | `true` | -      | 종료일  |
 
 #### Response
 
@@ -629,9 +629,9 @@ DELETE /project-api/projects/{projectId}/milestones/{milestoneId}
 * PathVariables
     
      | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
-      |-------------|------|------|--------|-------|
-      | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
-      | milestoneId   | `Long` | `true` | -    | 마일스톤 식별자   |
+     |-------------|------|------|--------|-------|
+     | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+     | milestoneId   | `Long` | `true` | -    | 마일스톤 식별자   |
 * Parameters
     * 없음
 * Body
@@ -664,8 +664,8 @@ GET /project-api/projects/{projectId}/milestones
 * PathVariables
     
      | 항목명        | 타입  | 필수여부 | 길이범위   | 비고    |
-      |-------------|------|------|--------|-------|
-      | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
+     |-------------|------|------|--------|-------|
+     | projectId   | `Long` | `true` | -    | 프로젝트 식별자   |
 * Parameters
 
   | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
@@ -684,8 +684,8 @@ GET /project-api/projects/{projectId}/milestones
      | projectId     | `Long`   | `true` | -      | 프로젝트 식별자  |
      | milestoneId   | `Long`   | `true` | -      | 마일스톤 식별자  |
      | milestoneName | `String` | `true` | 4 - 45 | 마일스톤 이름  |
-      | startDate     | `Date`   | `true` | -      | 시작일  |
-      | endDate       | `Date`   | `true` | -      | 종료일  |
+     | startDate     | `Date`   | `true` | -      | 시작일  |
+     | endDate       | `Date`   | `true` | -      | 종료일  |
 * Example
     ```json
     {
@@ -916,7 +916,7 @@ GET /project-api/projects/{projectId}/tasks/{taskId}/tags
 * Parameters
 
     | 항목명  | 타입    | 필수여부    | 길이범위 | 비고      |
-        |------|-------|---------|------|---------|
+    |------|-------|---------|------|---------|
     | page | `int` | `false` | -    | 조회할 페이지 |
     | size | `int` | `false` | -    | 페이지당 조회할 항목 수 |
     | sort | `String` | `false` | -    | 정렬 조건 |
