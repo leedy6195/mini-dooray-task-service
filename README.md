@@ -1,6 +1,6 @@
 # Specifications
 
----
+
 ## 요청
 ### 메시지
 * json 포맷을 사용합니다.
@@ -104,7 +104,7 @@ PUT /project-api/projects/{projectId}
 
   | 항목명              | 타입  | 필수여부 | 길이범위   | 비고                     |
   |------------------|------|------|--------|------------------------|
-	  | projectName      | `String` | `true` | 4 - 45 | 프로젝트명                  |
+  | projectName      | `String` | `true` | 4 - 45 | 프로젝트명                  |
   | projectStateCode | `String` | `true` | 2      | 01(활성), 02(휴면), 03(종료) |
 
 
@@ -525,7 +525,7 @@ GET /project-api/projects/{projectId}/accounts
 ## `project-api` > `milestones`
 ### 마일스톤 추가
 ```http
-CREATE /project-api/projects/{projectId}/milestones
+POST /project-api/projects/{projectId}/milestones
 ```
 #### Request
 * PathVariables
