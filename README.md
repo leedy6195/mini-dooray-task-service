@@ -1,4 +1,4 @@
-# Specifications
+# mini-dooray-task-service
 
 
 ## 요청
